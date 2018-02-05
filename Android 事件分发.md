@@ -70,7 +70,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   事件列：从手指接触屏幕至手指离开屏幕，这个过程产生的一系列事件
     任何事件列都是以DOWN事件开始，UP事件结束，中间有无数的MOVE事件，如下图：
 
-    [图片上传失败...(image-cc33d0-1517827970870)]
+[![事件列](http://img.blog.csdn.net/20180205192621349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205192621349?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 即当一个MotionEvent 产生后，系统需要把这个事件传递给一个具体的 View 去处理,
 
@@ -88,7 +88,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 *   Android的UI界面是由Activity、ViewGroup、View及其派生类组合而成的
 
-    [图片上传失败...(image-9604c2-1517827970870)]
+![UI界面](http://img.blog.csdn.net/20180205192659603?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 *   View是所有UI组件的基类
 
@@ -103,8 +103,8 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 ### 1.4 事件分发过程由哪些方法协作完成？
 
 **答：dispatchTouchEvent() 、onInterceptTouchEvent()和onTouchEvent()**
+[![事件分发相关方法](http://img.blog.csdn.net/20180205192834963?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205192834963?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-[图片上传失败...(image-618335-1517827970874)]
 
 > 下文会对这3个方法进行详细介绍
 
@@ -125,13 +125,17 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 *   事件分发过程由dispatchTouchEvent() 、onInterceptTouchEvent()和onTouchEvent()三个方法协助完成，如下图：
 
-[图片上传失败...(image-53b5ea-1517827970874)]
+[![方法详细介绍](http://img.blog.csdn.net/20180205192615050?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205192615050?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 *   Android事件分发流程如下：（**必须熟记**）
 
 > Android事件分发顺序：**Activity（Window） -> ViewGroup -> View**
 
-[图片上传失败...(image-ad1d4c-1517827970874)]
+
+
+[![事件分发机制详细流程](http://img.blog.csdn.net/20180205192529584?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205192529584?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+
 
 其中：
 
@@ -158,7 +162,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 | ViewGroup | onIntercepTouchEvent() | 即调用自身的onIntercepTouchEvent() |
 | View | onTouchEvent（） | 即调用自身的onTouchEvent（） |
 
-[图片上传失败...(image-c57b9c-1517827970874)]
+[![](http://img.blog.csdn.net/20180205193551077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205193551077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 **2\. 返回true**
 
@@ -167,7 +171,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   后续事件（Move、Up）会继续分发到该View
 *   流程图如下：
 
-[图片上传失败...(image-587f22-1517827970874)]
+[![](http://img.blog.csdn.net/20180205193835225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205193835225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 **3\. 返回false**
 
@@ -180,7 +184,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   后续事件（Move、Up）会继续分发到该View(与onTouchEvent()区别）
 *   流程图如下：
 
-    [图片上传失败...(image-e2f512-1517827970870)]
+[![](http://img.blog.csdn.net/20180205193944006?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205193944006?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 ### 2.2 onTouchEvent()
 
@@ -199,8 +203,8 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   事件停止传递
 *   该事件序列的后续事件（Move、Up）让其处理；
 *   流程图如下：
+![](http://img.blog.csdn.net/20180205195032911?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-    [图片上传失败...(image-664ee1-1517827970870)]
 
 **2\. 返回false（同默认实现：调用父类onTouchEvent()）**
 
@@ -208,8 +212,8 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   事件往上传递给父控件的onTouchEvent()处理
 *   当前View不再接受此事件列的其他事件（Move、Up）；
 *   流程图如下：
+![](http://img.blog.csdn.net/20180205195122571?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-    [图片上传失败...(image-94e09a-1517827970870)]
 
 ### 2.3 onInterceptTouchEvent()
 
@@ -269,7 +273,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 
 我们将要讨论的布局层次如下：
 
-[图片上传失败...(image-26f184-1517827970873)]
+![](http://img.blog.csdn.net/20180205205716300?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 *   最外层：Activiy A，包含两个子View：ViewGroup B、View C
 *   中间层：ViewGroup B，包含一个子View：View C
@@ -293,8 +297,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   事件传递情况：（如图下所示）
     *   从Activity A---->ViewGroup B--->View C，从上往下调用dispatchTouchEvent()
     *   再由View C--->ViewGroup B --->Activity A，从下往上调用onTouchEvent()
-
-[图片上传失败...(image-8fa965-1517827970873)]
+![](http://img.blog.csdn.net/20180205205123048?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 注：虽然ViewGroup B的onInterceptTouchEvent方法对DOWN事件返回了false，后续的事件（MOVE、UP）依然会传递给它的onInterceptTouchEvent()
 
@@ -311,8 +314,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   DOWN事件被传递给C的onTouchEvent方法，该方法返回true，表示处理这个事件
 *   因为C正在处理这个事件，那么DOWN事件将不再往上传递给B和A的onTouchEvent()；
 *   该事件列的其他事件（Move、Up）也将传递给C的onTouchEvent()
-
-[图片上传失败...(image-7aca09-1517827970873)]
+![](http://img.blog.csdn.net/20180205205216836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 #### 3.2.3 拦截DOWN事件
 
@@ -326,8 +328,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   该事件列的其他事件（Move、Up）将直接传递给B的onTouchEvent()
 
 > 该事件列的其他事件（Move、Up）将不会再传递给B的onInterceptTouchEvent方法，该方法一旦返回一次true，就再也不会被调用了。
-
-[图片上传失败...(image-945c34-1517827970873)]
+![](http://img.blog.csdn.net/20180205205303881?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 #### 3.2.4 拦截DOWN的后续事件
 
@@ -341,8 +342,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 > 2.  后续事件将不会再传递给B的onInterceptTouchEvent方法，该方法一旦返回一次true，就再也不会被调用了。
 
 *   C再也不会收到该事件列产生的后续事件。
-
-    [图片上传失败...(image-d641a2-1517827970870)]
+[![](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 特别注意：
 
