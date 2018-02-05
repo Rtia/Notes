@@ -1,4 +1,42 @@
 # 【Android 事件分发】
+## 事件分发中的onTouch和onTouchEvent有什么区别，又该如何使用？
+这两个方法都是**在View的dispatchTouchEvent中调用**的，**onTouch优先于onTouchEvent执行**。如果在onTouch方法中通过返回true将事件消费掉，onTouchEvent将不会再执行。
+
+另外需要注意的是，onTouch能够得到执行需要两个前提条件：
+第一mOnTouchListener的值不能为空，
+第二当前点击的控件必须是enable的。
+因此如果你有一个控件是非enable的，那么给它注册onTouch事件将永远得不到执行。对于这一类控件，如果我们想要监听它的touch事件，就必须通过在该控件中重写onTouchEvent方法来实现。
+
+## 请描述一下Android的事件分发机制
+Android的事件分发机制主要是Touch事件分发，有两个主角:ViewGroup和View。Activity的Touch事件事实上是调用它内部的ViewGroup的Touch事件，可以直接当成ViewGroup处理。
+View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内部的ViewGroup当成View来分析。
+先分析ViewGroup的处理流程：首先得有个结构模型概念：ViewGroup和View组成了一棵树形结构，最顶层为Activity的ViewGroup，下面有若干的ViewGroup节点，每个节点之下又有若干的ViewGroup节点或者View节点，依次类推。如图：
+![](http://upload-images.jianshu.io/upload_images/9028834-8b05fbb5900e4395.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+当一个Touch事件(触摸事件为例)到达根节点，即Acitivty的ViewGroup时，它会依次下发，下发的过程是调用子View(ViewGroup)的dispatchTouchEvent方法实现的。
+简单来说，就是**ViewGroup遍历它包含着的子View，调用每个View的dispatchTouchEvent方法，而当子View为ViewGroup时，又会通过调用ViwGroup的dispatchTouchEvent方法继续调用其内部的View的dispatchTouchEvent方法**。
+上述例子中的消息下发顺序是这样的：①-②-⑤-⑥-⑦-③-④。
+- **dispatchTouchEvent**方法只**负责事件的分发**，它拥有boolean类型的返回值，当返回为**true**时，顺序**下发**会**中断**。在上述例子中如果⑤的dispatchTouchEvent返回结果为true，那么⑥-⑦-③-④将都接收不到本次Touch事件。
+
+.
+1. Touch事件分发中只有两个主角:ViewGroup和View。
+**ViewGroup**包含**onInterceptTouchEvent**、**dispatchTouchEvent**、**onTouchEvent**三个相关事件。
+**View**包含**dispatchTouchEvent**、**onTouchEvent**两个相关事件。其中ViewGroup又继承于View。
+2. ViewGroup和View组成了一个树状结构，根节点为Activity内部包含的一个ViwGroup。
+3. **触摸事**件由Action_Down、Action_Move、Aciton_UP组成，其中一次完整的触摸事件中，Down和Up都只有一个，Move有若干个，可以为0个。
+4. 当Acitivty接收到Touch事件时，将遍历子View进行Down事件的分发。ViewGroup的遍历可以看成是递归的。**分发**的目的是为了**找到真正要处理本次完整触摸事件的View**，这个View会在**onTouchuEvent**结果返回**true**。
+5. 当某个**子View返回true**时，会**中止**Down事件的**分发**，同时在ViewGroup中记录该子View。接下去的Move和Up事件将由该子View直接进行处理。由于子View是保存在ViewGroup中的，多层ViewGroup的节点结构时，上级ViewGroup保存的会是真实处理事件的View所在的ViewGroup对象。
+如ViewGroup0-ViewGroup1-TextView的结构中，TextView返回了true，它将被保存在ViewGroup1中，而ViewGroup1也会返回true，被保存在ViewGroup0中。当Move和UP事件来时，会先从ViewGroup0传递至ViewGroup1，再由ViewGroup1传递至TextView。
+6. 当ViewGroup中所有子View**都不捕获**Down事件时，将**触发ViewGroup自身的onTouch**事件。触发的方式是**调用super.dispatchTouchEvent**函数，即父类View的dispatchTouchEvent方法。
+在所有子View**都不处理**的情况下，触发**Acitivity的onTouchEvent**方法。
+7. **onInterceptTouchEvent**有两个作用：
+ 1. 拦截Down事件的分发。
+ 2. 中止Up和Move事件向目标View传递，使得目标View所在的ViewGroup捕获Up和Move事件。
+
+
+
+
+
 # 前言
 
 *   Android事件分发机制是Android开发者必须了解的基础
