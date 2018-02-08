@@ -1,3 +1,31 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android SQLite】](#android-sqlite)
+  - [SQLite 简介](#sqlite-%E7%AE%80%E4%BB%8B)
+  - [使用 SQLiteOpenHelper 创建数据库](#%E4%BD%BF%E7%94%A8-sqliteopenhelper-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
+    - [创建 SQLiteOpenHelper 类](#%E5%88%9B%E5%BB%BA-sqliteopenhelper-%E7%B1%BB)
+    - [使用 SQLiteOpenHelper 类](#%E4%BD%BF%E7%94%A8-sqliteopenhelper-%E7%B1%BB)
+  - [数据库的增删改查](#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5)
+    - [1、使用纯 SQL 语句实现](#1%E4%BD%BF%E7%94%A8%E7%BA%AF-sql-%E8%AF%AD%E5%8F%A5%E5%AE%9E%E7%8E%B0)
+      - [添加数据](#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE)
+      - [删除数据](#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE)
+      - [修改数据](#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE)
+      - [查询数据](#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE)
+    - [2、使用特有 API 实现](#2%E4%BD%BF%E7%94%A8%E7%89%B9%E6%9C%89-api-%E5%AE%9E%E7%8E%B0)
+      - [添加数据](#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE-1)
+      - [删除数据](#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE-1)
+      - [修改数据](#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE-1)
+      - [查询数据](#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE-1)
+    - [两种 SQLiteDatabase 的不同](#%E4%B8%A4%E7%A7%8D-sqlitedatabase-%E7%9A%84%E4%B8%8D%E5%90%8C)
+  - [数据库的升级和事务操作](#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8D%87%E7%BA%A7%E5%92%8C%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C)
+    - [数据库的升级](#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8D%87%E7%BA%A7)
+    - [事务的操作](#%E4%BA%8B%E5%8A%A1%E7%9A%84%E6%93%8D%E4%BD%9C)
+  - [sqlite3 工具的使用](#sqlite3-%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android SQLite】

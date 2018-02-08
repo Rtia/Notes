@@ -1,3 +1,33 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android 进程和线程】](#android-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B)
+- [Android 进程](#android-%E8%BF%9B%E7%A8%8B)
+  - [进程生命周期](#%E8%BF%9B%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
+    - [1、前台进程foreground process](#1%E5%89%8D%E5%8F%B0%E8%BF%9B%E7%A8%8Bforeground-process)
+    - [2、可见进程Visable process](#2%E5%8F%AF%E8%A7%81%E8%BF%9B%E7%A8%8Bvisable-process)
+    - [3、服务进程service process](#3%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8Bservice-process)
+    - [4、后台进程background process](#4%E5%90%8E%E5%8F%B0%E8%BF%9B%E7%A8%8Bbackground-process)
+    - [5、空进程    empty process](#5%E7%A9%BA%E8%BF%9B%E7%A8%8B----empty-process)
+  - [多进程](#%E5%A4%9A%E8%BF%9B%E7%A8%8B)
+    - [多进程好处](#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%A5%BD%E5%A4%84)
+    - [多进程实现](#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%AE%9E%E7%8E%B0)
+    - [有哪些陷阱](#%E6%9C%89%E5%93%AA%E4%BA%9B%E9%99%B7%E9%98%B1)
+      - [Application的多次重建](#application%E7%9A%84%E5%A4%9A%E6%AC%A1%E9%87%8D%E5%BB%BA)
+      - [静态成员的失效](#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E7%9A%84%E5%A4%B1%E6%95%88)
+      - [文件共享问题](#%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98)
+      - [断点调试问题](#%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95%E9%97%AE%E9%A2%98)
+      - [总结](#%E6%80%BB%E7%BB%93)
+- [Android 线程](#android-%E7%BA%BF%E7%A8%8B)
+  - [UI线程](#ui%E7%BA%BF%E7%A8%8B)
+  - [worker线程](#worker%E7%BA%BF%E7%A8%8B)
+  - [异步任务ASYNC TASK](#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1async-task)
+  - [线程安全方法](#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%96%B9%E6%B3%95)
+  - [进程间通信](#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android 进程和线程】

@@ -1,3 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android 模拟服务器返回数据】](#android-%E6%A8%A1%E6%8B%9F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE)
+  - [背景](#%E8%83%8C%E6%99%AF)
+    - [实现思路](#%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF)
+  - [使用Charles模拟数据](#%E4%BD%BF%E7%94%A8charles%E6%A8%A1%E6%8B%9F%E6%95%B0%E6%8D%AE)
+    - [准备条件](#%E5%87%86%E5%A4%87%E6%9D%A1%E4%BB%B6)
+    - [配置](#%E9%85%8D%E7%BD%AE)
+    - [转接服务器地址](#%E8%BD%AC%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9C%B0%E5%9D%80)
+    - [小结](#%E5%B0%8F%E7%BB%93)
+  - [自定义OkHttp Interceptor模拟返回](#%E8%87%AA%E5%AE%9A%E4%B9%89okhttp-interceptor%E6%A8%A1%E6%8B%9F%E8%BF%94%E5%9B%9E)
+    - [OkHttp拦截器](#okhttp%E6%8B%A6%E6%88%AA%E5%99%A8)
+    - [代码实现](#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0)
+    - [小结](#%E5%B0%8F%E7%BB%93-1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android 模拟服务器返回数据】

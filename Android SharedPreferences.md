@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android SharedPreferences】](#android-sharedpreferences)
+  - [获取 SharedPreferences 对象](#%E8%8E%B7%E5%8F%96-sharedpreferences-%E5%AF%B9%E8%B1%A1)
+  - [添加/修改数据](#%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE)
+  - [获取数据](#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE)
+  - [删除数据](#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE)
+  - [sp 的连点操作](#sp-%E7%9A%84%E8%BF%9E%E7%82%B9%E6%93%8D%E4%BD%9C)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android SharedPreferences】

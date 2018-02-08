@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android Handler机制】](#android-handler%E6%9C%BA%E5%88%B6)
+  - [Handler](#handler)
+  - [Message](#message)
+  - [MessageQueue](#messagequeue)
+  - [Looper](#looper)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 【Android Handler机制】
 Android中主线程也叫UI线程，那么从名字上我们也知道主线程主要是用来创建、更新UI的，而其他耗时操作，比如网络访问，或者文件处理，多媒体处理等都需要在子线程中操作，之所以在子线程中操作是为了保证UI的流畅程度，手机显示的刷新频率是60Hz，也就是一秒钟刷新60次，每16.67毫秒刷新一次，为了不丢帧，那么主线程处理代码最好不要超过16毫秒。当子线程处理完数据后，为了防止UI处理逻辑的混乱，Android只允许主线程修改UI，那么这时候就需要Handler来充当子线程和主线程之间的桥梁了。
 

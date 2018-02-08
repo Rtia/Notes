@@ -1,3 +1,35 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android ANR】](#android-anr)
+  - [概述](#%E6%A6%82%E8%BF%B0)
+    - [1.1 何为ANR](#11-%E4%BD%95%E4%B8%BAanr)
+    - [1.2 为什么会产生ANR](#12-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E4%BA%A7%E7%94%9Fanr)
+    - [1.3 如何避免ANR](#13-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8Danr)
+  - [2, ANR分析](#2-anr%E5%88%86%E6%9E%90)
+    - [2.1 获取ANR产生的trace文件](#21-%E8%8E%B7%E5%8F%96anr%E4%BA%A7%E7%94%9F%E7%9A%84trace%E6%96%87%E4%BB%B6)
+    - [2.2 分析traces.txt](#22-%E5%88%86%E6%9E%90tracestxt)
+      - [2.2.1 普通阻塞导致的ANR](#221-%E6%99%AE%E9%80%9A%E9%98%BB%E5%A1%9E%E5%AF%BC%E8%87%B4%E7%9A%84anr)
+      - [2.2.2 CPU满负荷](#222-cpu%E6%BB%A1%E8%B4%9F%E8%8D%B7)
+      - [2.2.3 内存原因](#223-%E5%86%85%E5%AD%98%E5%8E%9F%E5%9B%A0)
+    - [2.2 ANR的处理](#22-anr%E7%9A%84%E5%A4%84%E7%90%86)
+  - [3, 深入一点](#3-%E6%B7%B1%E5%85%A5%E4%B8%80%E7%82%B9)
+    - [3.1 哪些地方是执行在主线程的](#31-%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9%E6%98%AF%E6%89%A7%E8%A1%8C%E5%9C%A8%E4%B8%BB%E7%BA%BF%E7%A8%8B%E7%9A%84)
+    - [3.2 使用子线程的方式有哪些](#32-%E4%BD%BF%E7%94%A8%E5%AD%90%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B)
+      - [3.2.1 启Thread方式](#321-%E5%90%AFthread%E6%96%B9%E5%BC%8F)
+      - [3.2.2 使用AsyncTask](#322-%E4%BD%BF%E7%94%A8asynctask)
+      - [3.2.3 HandlerThread](#323-handlerthread)
+      - [3.2.4 IntentService](#324-intentservice)
+      - [3.2.5 Loader](#325-loader)
+      - [3.2.6 特别注意](#326-%E7%89%B9%E5%88%AB%E6%B3%A8%E6%84%8F)
+- [ANR定位](#anr%E5%AE%9A%E4%BD%8D)
+    - [**九：如何调查并解决ANR**](#%E4%B9%9D%E5%A6%82%E4%BD%95%E8%B0%83%E6%9F%A5%E5%B9%B6%E8%A7%A3%E5%86%B3anr)
+      - [案例1：关键词:ContentResolver in AsyncTask onPostExecute, high iowait](#%E6%A1%88%E4%BE%8B1%E5%85%B3%E9%94%AE%E8%AF%8Dcontentresolver-in-asynctask-onpostexecute-high-iowait)
+  - [案例2：关键词:在UI线程进行网络数据的读写](#%E6%A1%88%E4%BE%8B2%E5%85%B3%E9%94%AE%E8%AF%8D%E5%9C%A8ui%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8C%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%86%99)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 【Android ANR】
 
 ## 概述

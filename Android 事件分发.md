@@ -1,3 +1,58 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android 事件分发】](#android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91)
+  - [事件分发中的onTouch和onTouchEvent有什么区别，又该如何使用？](#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E4%B8%AD%E7%9A%84ontouch%E5%92%8Contouchevent%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E5%8F%88%E8%AF%A5%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+  - [请描述一下Android的事件分发机制](#%E8%AF%B7%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8Bandroid%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6)
+- [前言](#%E5%89%8D%E8%A8%80)
+- [1\. 基础认知](#1%5C-%E5%9F%BA%E7%A1%80%E8%AE%A4%E7%9F%A5)
+    - [1.1 事件分发的对象是谁？](#11-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E7%9A%84%E5%AF%B9%E8%B1%A1%E6%98%AF%E8%B0%81)
+    - [1.2 事件分发的本质](#12-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E7%9A%84%E6%9C%AC%E8%B4%A8)
+    - [1.3 事件在哪些对象之间进行传递？](#13-%E4%BA%8B%E4%BB%B6%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E8%BF%9B%E8%A1%8C%E4%BC%A0%E9%80%92)
+    - [1.4 事件分发过程由哪些方法协作完成？](#14-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E8%BF%87%E7%A8%8B%E7%94%B1%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95%E5%8D%8F%E4%BD%9C%E5%AE%8C%E6%88%90)
+    - [1.5 总结](#15-%E6%80%BB%E7%BB%93)
+- [2\. 事件分发机制方法&流程介绍](#2%5C-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E6%96%B9%E6%B3%95%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D)
+    - [2.1 dispatchTouchEvent()](#21-dispatchtouchevent)
+    - [2.2 onTouchEvent()](#22-ontouchevent)
+    - [2.3 onInterceptTouchEvent()](#23-onintercepttouchevent)
+    - [2.4 三者关系](#24-%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB)
+    - [2.5 总结](#25-%E6%80%BB%E7%BB%93)
+- [3\. 事件分发场景介绍](#3%5C-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E5%9C%BA%E6%99%AF%E4%BB%8B%E7%BB%8D)
+    - [3.1 背景描述](#31-%E8%83%8C%E6%99%AF%E6%8F%8F%E8%BF%B0)
+    - [3.2 一般的事件传递情况](#32-%E4%B8%80%E8%88%AC%E7%9A%84%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%83%85%E5%86%B5)
+    - [3.2.1 默认情况](#321-%E9%BB%98%E8%AE%A4%E6%83%85%E5%86%B5)
+      - [3.2.2 处理事件](#322-%E5%A4%84%E7%90%86%E4%BA%8B%E4%BB%B6)
+      - [3.2.3 拦截DOWN事件](#323-%E6%8B%A6%E6%88%AAdown%E4%BA%8B%E4%BB%B6)
+      - [3.2.4 拦截DOWN的后续事件](#324-%E6%8B%A6%E6%88%AAdown%E7%9A%84%E5%90%8E%E7%BB%AD%E4%BA%8B%E4%BB%B6)
+    - [3.3 总结](#33-%E6%80%BB%E7%BB%93)
+- [4\. Android事件分发机制源码分析](#4%5C-android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+    - [4.1 Activity的事件分发机制](#41-activity%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6)
+    - [4.1.1 源码分析](#411-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+    - [4.1.2 汇总](#412-%E6%B1%87%E6%80%BB)
+    - [4.1.3 结论](#413-%E7%BB%93%E8%AE%BA)
+- [4.1.4 疑问](#414-%E7%96%91%E9%97%AE)
+- [4.2 ViewGroup事件的分发机制](#42-viewgroup%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6)
+    - [4.2.1 Demo讲解](#421-demo%E8%AE%B2%E8%A7%A3)
+    - [4.2.2 源码分析](#422-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+    - [关注点1（onInterceptTouchEvent()源码分析）](#%E5%85%B3%E6%B3%A8%E7%82%B91onintercepttouchevent%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+    - [关注点2](#%E5%85%B3%E6%B3%A8%E7%82%B92)
+- [结论](#%E7%BB%93%E8%AE%BA)
+    - [4.3 View事件的分发机制](#43-view%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6)
+    - [结论](#%E7%BB%93%E8%AE%BA-1)
+    - [Demo论证](#demo%E8%AE%BA%E8%AF%81)
+    - [1\. Demo1：在回调onTouch()里返回true](#1%5C-demo1%E5%9C%A8%E5%9B%9E%E8%B0%83ontouch%E9%87%8C%E8%BF%94%E5%9B%9Etrue)
+    - [2\. Demo2：在回调onTouch()里返回false](#2%5C-demo2%E5%9C%A8%E5%9B%9E%E8%B0%83ontouch%E9%87%8C%E8%BF%94%E5%9B%9Efalse)
+    - [如果你看到此处，那么恭喜你，你已经能非常熟悉掌握Android的事件分发机制了（Activity、ViewGroup、View的事件分发机制）](#%E5%A6%82%E6%9E%9C%E4%BD%A0%E7%9C%8B%E5%88%B0%E6%AD%A4%E5%A4%84%E9%82%A3%E4%B9%88%E6%81%AD%E5%96%9C%E4%BD%A0%E4%BD%A0%E5%B7%B2%E7%BB%8F%E8%83%BD%E9%9D%9E%E5%B8%B8%E7%86%9F%E6%82%89%E6%8E%8C%E6%8F%A1android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E4%BA%86activityviewgroupview%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6)
+- [5\. 思考点](#5%5C-%E6%80%9D%E8%80%83%E7%82%B9)
+    - [5.1 onTouch()和onTouchEvent()的区别](#51-ontouch%E5%92%8Contouchevent%E7%9A%84%E5%8C%BA%E5%88%AB)
+    - [5.2 Touch事件的后续事件（MOVE、UP）层级传递](#52-touch%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%90%8E%E7%BB%AD%E4%BA%8B%E4%BB%B6moveup%E5%B1%82%E7%BA%A7%E4%BC%A0%E9%80%92)
+- [6\. 总结](#6%5C-%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+
 # 【Android 事件分发】
 ## 事件分发中的onTouch和onTouchEvent有什么区别，又该如何使用？
 这两个方法都是**在View的dispatchTouchEvent中调用**的，**onTouch优先于onTouchEvent执行**。如果在onTouch方法中通过返回true将事件消费掉，onTouchEvent将不会再执行。
@@ -20,18 +75,18 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 .
 1. Touch事件分发中只有两个主角:ViewGroup和View。
-**ViewGroup**包含**onInterceptTouchEvent**、**dispatchTouchEvent**、**onTouchEvent**三个相关事件。
-**View**包含**dispatchTouchEvent**、**onTouchEvent**两个相关事件。其中ViewGroup又继承于View。
+  **ViewGroup**包含**onInterceptTouchEvent**、**dispatchTouchEvent**、**onTouchEvent**三个相关事件。
+  **View**包含**dispatchTouchEvent**、**onTouchEvent**两个相关事件。其中ViewGroup又继承于View。
 2. ViewGroup和View组成了一个树状结构，根节点为Activity内部包含的一个ViwGroup。
 3. **触摸事**件由Action_Down、Action_Move、Aciton_UP组成，其中一次完整的触摸事件中，Down和Up都只有一个，Move有若干个，可以为0个。
 4. 当Acitivty接收到Touch事件时，将遍历子View进行Down事件的分发。ViewGroup的遍历可以看成是递归的。**分发**的目的是为了**找到真正要处理本次完整触摸事件的View**，这个View会在**onTouchuEvent**结果返回**true**。
 5. 当某个**子View返回true**时，会**中止**Down事件的**分发**，同时在ViewGroup中记录该子View。接下去的Move和Up事件将由该子View直接进行处理。由于子View是保存在ViewGroup中的，多层ViewGroup的节点结构时，上级ViewGroup保存的会是真实处理事件的View所在的ViewGroup对象。
-如ViewGroup0-ViewGroup1-TextView的结构中，TextView返回了true，它将被保存在ViewGroup1中，而ViewGroup1也会返回true，被保存在ViewGroup0中。当Move和UP事件来时，会先从ViewGroup0传递至ViewGroup1，再由ViewGroup1传递至TextView。
+  如ViewGroup0-ViewGroup1-TextView的结构中，TextView返回了true，它将被保存在ViewGroup1中，而ViewGroup1也会返回true，被保存在ViewGroup0中。当Move和UP事件来时，会先从ViewGroup0传递至ViewGroup1，再由ViewGroup1传递至TextView。
 6. 当ViewGroup中所有子View**都不捕获**Down事件时，将**触发ViewGroup自身的onTouch**事件。触发的方式是**调用super.dispatchTouchEvent**函数，即父类View的dispatchTouchEvent方法。
-在所有子View**都不处理**的情况下，触发**Acitivity的onTouchEvent**方法。
+  在所有子View**都不处理**的情况下，触发**Acitivity的onTouchEvent**方法。
 7. **onInterceptTouchEvent**有两个作用：
- 1. 拦截Down事件的分发。
- 2. 中止Up和Move事件向目标View传递，使得目标View所在的ViewGroup捕获Up和Move事件。
+ 8. 拦截Down事件的分发。
+ 9. 中止Up和Move事件向目标View传递，使得目标View所在的ViewGroup捕获Up和Move事件。
 
 
 
@@ -48,7 +103,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 *   文章较长，阅读需要较长时间，建议收藏等充足时间再进行阅读
 
-* * *
+*   * *
 
 
 # 1\. 基础认知
@@ -147,20 +202,20 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 ### 2.1 dispatchTouchEvent()
 
-| 属性 | 介绍 |
-| --- | --- |
-| 使用对象 | Activity、ViewGroup、View |
-| 作用 | 分发点击事件 |
+| 属性   | 介绍                         |
+| ---- | -------------------------- |
+| 使用对象 | Activity、ViewGroup、View    |
+| 作用   | 分发点击事件                     |
 | 调用时刻 | 当点击事件能够传递给当前View时，该方法就会被调用 |
-| 返回结果 | 是否消费当前事件，详细情况如下： |
+| 返回结果 | 是否消费当前事件，详细情况如下：           |
 
 **1\. 默认情况：根据当前对象的不同而返回方法不同**
 
-| 对象 | 返回方法 | 备注 |
-| --- | --- | --- |
-| Activity | super.dispatchTouchEvent() | 即调用父类ViewGroup的dispatchTouchEvent() |
-| ViewGroup | onIntercepTouchEvent() | 即调用自身的onIntercepTouchEvent() |
-| View | onTouchEvent（） | 即调用自身的onTouchEvent（） |
+| 对象        | 返回方法                       | 备注                                  |
+| --------- | -------------------------- | ----------------------------------- |
+| Activity  | super.dispatchTouchEvent() | 即调用父类ViewGroup的dispatchTouchEvent() |
+| ViewGroup | onIntercepTouchEvent()     | 即调用自身的onIntercepTouchEvent()        |
+| View      | onTouchEvent（）             | 即调用自身的onTouchEvent（）                |
 
 [![](http://img.blog.csdn.net/20180205193551077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205193551077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
@@ -188,12 +243,12 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 
 ### 2.2 onTouchEvent()
 
-| 属性 | 介绍 |
-| --- | --- |
-| 使用对象 | Activity、ViewGroup、View |
-| 作用 | 处理点击事件 |
+| 属性   | 介绍                        |
+| ---- | ------------------------- |
+| 使用对象 | Activity、ViewGroup、View   |
+| 作用   | 处理点击事件                    |
 | 调用时刻 | 在dispatchTouchEvent()内部调用 |
-| 返回结果 | 是否消费（处理）当前事件，详细情况如下： |
+| 返回结果 | 是否消费（处理）当前事件，详细情况如下：      |
 
 > 与dispatchTouchEvent()类似
 
@@ -203,7 +258,7 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   事件停止传递
 *   该事件序列的后续事件（Move、Up）让其处理；
 *   流程图如下：
-![](http://img.blog.csdn.net/20180205195032911?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+  ![](http://img.blog.csdn.net/20180205195032911?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 
 **2\. 返回false（同默认实现：调用父类onTouchEvent()）**
@@ -212,17 +267,17 @@ View在ViewGroup内，ViewGroup也可以在其他ViewGroup内，这时候把内�
 *   事件往上传递给父控件的onTouchEvent()处理
 *   当前View不再接受此事件列的其他事件（Move、Up）；
 *   流程图如下：
-![](http://img.blog.csdn.net/20180205195122571?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+  ![](http://img.blog.csdn.net/20180205195122571?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 
 ### 2.3 onInterceptTouchEvent()
 
-| 属性 | 介绍 |
-| --- | --- |
-| 使用对象 | ViewGroup（注：Activity、View都没该方法） |
-| 作用 | 拦截事件，即自己处理该事件 |
+| 属性   | 介绍                                  |
+| ---- | ----------------------------------- |
+| 使用对象 | ViewGroup（注：Activity、View都没该方法）     |
+| 作用   | 拦截事件，即自己处理该事件                       |
 | 调用时刻 | 在ViewGroup的dispatchTouchEvent()内部调用 |
-| 返回结果 | 是否拦截当前事件，详细情况如下： |
+| 返回结果 | 是否拦截当前事件，详细情况如下：                    |
 
 [图片上传失败...(image-501131-1517827970873)]
 
@@ -297,7 +352,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   事件传递情况：（如图下所示）
     *   从Activity A---->ViewGroup B--->View C，从上往下调用dispatchTouchEvent()
     *   再由View C--->ViewGroup B --->Activity A，从下往上调用onTouchEvent()
-![](http://img.blog.csdn.net/20180205205123048?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+      ![](http://img.blog.csdn.net/20180205205123048?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 注：虽然ViewGroup B的onInterceptTouchEvent方法对DOWN事件返回了false，后续的事件（MOVE、UP）依然会传递给它的onInterceptTouchEvent()
 
@@ -314,7 +369,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   DOWN事件被传递给C的onTouchEvent方法，该方法返回true，表示处理这个事件
 *   因为C正在处理这个事件，那么DOWN事件将不再往上传递给B和A的onTouchEvent()；
 *   该事件列的其他事件（Move、Up）也将传递给C的onTouchEvent()
-![](http://img.blog.csdn.net/20180205205216836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+  ![](http://img.blog.csdn.net/20180205205216836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 #### 3.2.3 拦截DOWN事件
 
@@ -328,7 +383,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   该事件列的其他事件（Move、Up）将直接传递给B的onTouchEvent()
 
 > 该事件列的其他事件（Move、Up）将不会再传递给B的onInterceptTouchEvent方法，该方法一旦返回一次true，就再也不会被调用了。
-![](http://img.blog.csdn.net/20180205205303881?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+> ![](http://img.blog.csdn.net/20180205205303881?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 #### 3.2.4 拦截DOWN的后续事件
 
@@ -342,7 +397,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 > 2.  后续事件将不会再传递给B的onInterceptTouchEvent方法，该方法一旦返回一次true，就再也不会被调用了。
 
 *   C再也不会收到该事件列产生的后续事件。
-[![](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+  [![](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)](http://img.blog.csdn.net/20180205205332447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 特别注意：
 
@@ -356,7 +411,7 @@ public boolean dispatchTouchEvent(MotionEvent ev) {
 *   **如果你只是希望了解Android事件分发机制而不想深入了解，那么你可以离开这篇文章了**
 *   对于程序猿来说，知其然还需要知其所以然，接下来，**我将通过源码分析来深入了解Android事件分发机制**
 
-* * *
+*   * *
 
 # 4\. Android事件分发机制源码分析
 
@@ -1063,3 +1118,4 @@ mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&
 
 引用：
 [Android事件分发机制详解：史上最全面、最易懂](https://www.jianshu.com/p/38015afcdb58)
+

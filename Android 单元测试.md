@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android 单元测试】](#android-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+  - [什么是单元测试](#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+  - [为什么需要进行单元测试](#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+- [在Android Studio中进行单元测试](#%E5%9C%A8android-studio%E4%B8%AD%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+  - [Java方法单元测试](#java%E6%96%B9%E6%B3%95%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+    - [首先，创建一个用于测试的类：](#%E9%A6%96%E5%85%88%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%94%A8%E4%BA%8E%E6%B5%8B%E8%AF%95%E7%9A%84%E7%B1%BB)
+    - [创建测试类](#%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E7%B1%BB)
+    - [运行](#%E8%BF%90%E8%A1%8C)
+  - [UI单元测试](#ui%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+    - [新增被测试界面](#%E6%96%B0%E5%A2%9E%E8%A2%AB%E6%B5%8B%E8%AF%95%E7%95%8C%E9%9D%A2)
+    - [创建测试类](#%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E7%B1%BB-1)
+      - [代码说明](#%E4%BB%A3%E7%A0%81%E8%AF%B4%E6%98%8E)
+  - [Mockito测试](#mockito%E6%B5%8B%E8%AF%95)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android 单元测试】

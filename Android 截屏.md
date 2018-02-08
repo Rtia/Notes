@@ -1,3 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Android 截屏](#android-%E6%88%AA%E5%B1%8F)
+  - [一： 普通截屏的实现](#%E4%B8%80-%E6%99%AE%E9%80%9A%E6%88%AA%E5%B1%8F%E7%9A%84%E5%AE%9E%E7%8E%B0)
+    - [方法1：](#%E6%96%B9%E6%B3%951)
+    - [方法2：](#%E6%96%B9%E6%B3%952)
+  - [二：开源方案](#%E4%BA%8C%E5%BC%80%E6%BA%90%E6%96%B9%E6%A1%88)
+  - [三： ScrollView截屏](#%E4%B8%89-scrollview%E6%88%AA%E5%B1%8F)
+  - [四： ListView截屏](#%E5%9B%9B-listview%E6%88%AA%E5%B1%8F)
+  - [五： RecyclerView截屏](#%E4%BA%94-recyclerview%E6%88%AA%E5%B1%8F)
+  - [六： 其他屏幕相关工具](#%E5%85%AD-%E5%85%B6%E4%BB%96%E5%B1%8F%E5%B9%95%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7)
+    - [1.获取状态栏高度常见方式](#1%E8%8E%B7%E5%8F%96%E7%8A%B6%E6%80%81%E6%A0%8F%E9%AB%98%E5%BA%A6%E5%B8%B8%E8%A7%81%E6%96%B9%E5%BC%8F)
+    - [2.获取标题栏高度](#2%E8%8E%B7%E5%8F%96%E6%A0%87%E9%A2%98%E6%A0%8F%E9%AB%98%E5%BA%A6)
+    - [3.获取屏幕宽高](#3%E8%8E%B7%E5%8F%96%E5%B1%8F%E5%B9%95%E5%AE%BD%E9%AB%98)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # Android 截屏

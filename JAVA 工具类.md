@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【JAVA 工具类】](#java-%E5%B7%A5%E5%85%B7%E7%B1%BB)
+- [System](#system)
+- [Runtime](#runtime)
+- [Date](#date)
+  - [日期和时间模式](#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E6%A8%A1%E5%BC%8F)
+- [Calendar](#calendar)
+  - [DAY_OF_WEEK](#day_of_week)
+  - [MONTH](#month)
+  - [Calendar.set](#calendarset)
+  - [习题: 获取任意年的二月有多少天](#%E4%B9%A0%E9%A2%98-%E8%8E%B7%E5%8F%96%E4%BB%BB%E6%84%8F%E5%B9%B4%E7%9A%84%E4%BA%8C%E6%9C%88%E6%9C%89%E5%A4%9A%E5%B0%91%E5%A4%A9)
+- [Math](#math)
+  - [random](#random)
+  - [习题：给定一个小数，保留该小数的后指定位数](#%E4%B9%A0%E9%A2%98%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%B0%8F%E6%95%B0%E4%BF%9D%E7%95%99%E8%AF%A5%E5%B0%8F%E6%95%B0%E7%9A%84%E5%90%8E%E6%8C%87%E5%AE%9A%E4%BD%8D%E6%95%B0)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【JAVA 工具类】

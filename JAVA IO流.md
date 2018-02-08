@@ -1,3 +1,43 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【JAVA IO流】](#java-io%E6%B5%81)
+  - [IO(Input Output)流](#ioinput-output%E6%B5%81)
+  - [IO流常用基类](#io%E6%B5%81%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%B1%BB)
+  - [IO程序的书写](#io%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B9%A6%E5%86%99)
+  - [字符流](#%E5%AD%97%E7%AC%A6%E6%B5%81)
+    - [字符流——创建文件](#%E5%AD%97%E7%AC%A6%E6%B5%81%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6)
+      - [IO异常的处理方式](#io%E5%BC%82%E5%B8%B8%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F)
+      - [对已有文件的数据续写](#%E5%AF%B9%E5%B7%B2%E6%9C%89%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%AD%E5%86%99)
+    - [字符流——读取文件](#%E5%AD%97%E7%AC%A6%E6%B5%81%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6)
+      - [通过字符数组读取文件](#%E9%80%9A%E8%BF%87%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6)
+    - [实例](#%E5%AE%9E%E4%BE%8B)
+      - [习题：复制文本文件](#%E4%B9%A0%E9%A2%98%E5%A4%8D%E5%88%B6%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6)
+    - [字符流的缓冲区](#%E5%AD%97%E7%AC%A6%E6%B5%81%E7%9A%84%E7%BC%93%E5%86%B2%E5%8C%BA)
+      - [BufferedWriter](#bufferedwriter)
+      - [BufferedReader](#bufferedreader)
+      - [习题：通过缓冲区复制一个.java文件](#%E4%B9%A0%E9%A2%98%E9%80%9A%E8%BF%87%E7%BC%93%E5%86%B2%E5%8C%BA%E5%A4%8D%E5%88%B6%E4%B8%80%E4%B8%AAjava%E6%96%87%E4%BB%B6)
+      - [习题：模拟BufferedReader-使用装饰设计模式](#%E4%B9%A0%E9%A2%98%E6%A8%A1%E6%8B%9Fbufferedreader-%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+      - [习题：模拟LineNumerReader](#%E4%B9%A0%E9%A2%98%E6%A8%A1%E6%8B%9Flinenumerreader)
+  - [字节流](#%E5%AD%97%E8%8A%82%E6%B5%81)
+      - [习题：复制一个图片](#%E4%B9%A0%E9%A2%98%E5%A4%8D%E5%88%B6%E4%B8%80%E4%B8%AA%E5%9B%BE%E7%89%87)
+    - [字节流的缓冲区](#%E5%AD%97%E8%8A%82%E6%B5%81%E7%9A%84%E7%BC%93%E5%86%B2%E5%8C%BA)
+      - [练习：通过几种方式对MP3的进行拷贝，比较它们的效率](#%E7%BB%83%E4%B9%A0%E9%80%9A%E8%BF%87%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F%E5%AF%B9mp3%E7%9A%84%E8%BF%9B%E8%A1%8C%E6%8B%B7%E8%B4%9D%E6%AF%94%E8%BE%83%E5%AE%83%E4%BB%AC%E7%9A%84%E6%95%88%E7%8E%87)
+  - [标准输入输出流](#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81)
+    - [习题：读取键盘录入](#%E4%B9%A0%E9%A2%98%E8%AF%BB%E5%8F%96%E9%94%AE%E7%9B%98%E5%BD%95%E5%85%A5)
+  - [转换流](#%E8%BD%AC%E6%8D%A2%E6%B5%81)
+    - [标准输入输出流示例](#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81%E7%A4%BA%E4%BE%8B)
+  - [流的基本应用小节](#%E6%B5%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%BA%94%E7%94%A8%E5%B0%8F%E8%8A%82)
+    - [流操作的基本规律](#%E6%B5%81%E6%93%8D%E4%BD%9C%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%BE%8B)
+    - [示例：](#%E7%A4%BA%E4%BE%8B)
+      - [习题：生成异常日志文件](#%E4%B9%A0%E9%A2%98%E7%94%9F%E6%88%90%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6)
+      - [习题：生成系统日志文件](#%E4%B9%A0%E9%A2%98%E7%94%9F%E6%88%90%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6)
+    - [字符流继承体系简图](#%E5%AD%97%E7%AC%A6%E6%B5%81%E7%BB%A7%E6%89%BF%E4%BD%93%E7%B3%BB%E7%AE%80%E5%9B%BE)
+    - [字节流继承体系简图](#%E5%AD%97%E8%8A%82%E6%B5%81%E7%BB%A7%E6%89%BF%E4%BD%93%E7%B3%BB%E7%AE%80%E5%9B%BE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【JAVA IO流】

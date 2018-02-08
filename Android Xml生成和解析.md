@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【Android Xml生成和解析】](#android-xml%E7%94%9F%E6%88%90%E5%92%8C%E8%A7%A3%E6%9E%90)
+  - [拼接字符串方式生成 Xml 文件](#%E6%8B%BC%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E5%BC%8F%E7%94%9F%E6%88%90-xml-%E6%96%87%E4%BB%B6)
+  - [使用 XmlSerializer 生成 Xml 文件](#%E4%BD%BF%E7%94%A8-xmlserializer-%E7%94%9F%E6%88%90-xml-%E6%96%87%E4%BB%B6)
+  - [使用 Pull 解析 Xml 格式数据](#%E4%BD%BF%E7%94%A8-pull-%E8%A7%A3%E6%9E%90-xml-%E6%A0%BC%E5%BC%8F%E6%95%B0%E6%8D%AE)
+  - [Pull 解析和 SAX 解析对比](#pull-%E8%A7%A3%E6%9E%90%E5%92%8C-sax-%E8%A7%A3%E6%9E%90%E5%AF%B9%E6%AF%94)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【Android Xml生成和解析】

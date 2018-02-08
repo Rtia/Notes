@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【AndroidStudio 调试技巧】](#androidstudio-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7)
+  - [基本使用](#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8)
+  - [条件断点](#%E6%9D%A1%E4%BB%B6%E6%96%AD%E7%82%B9)
+  - [日志断点](#%E6%97%A5%E5%BF%97%E6%96%AD%E7%82%B9)
+  - [变量赋值](#%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC)
+  - [变量观察](#%E5%8F%98%E9%87%8F%E8%A7%82%E5%AF%9F)
+  - [对象求值](#%E5%AF%B9%E8%B1%A1%E6%B1%82%E5%80%BC)
+  - [方法断点](#%E6%96%B9%E6%B3%95%E6%96%AD%E7%82%B9)
+  - [变量断点](#%E5%8F%98%E9%87%8F%E6%96%AD%E7%82%B9)
+  - [异常断点](#%E5%BC%82%E5%B8%B8%E6%96%AD%E7%82%B9)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 【AndroidStudio 调试技巧】
 
 ## 基本使用

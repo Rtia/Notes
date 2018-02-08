@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【JAVA 运算符】](#java-%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [1 算术运算符](#1-%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [**转义字符**](#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6)
+    - [算术运算符的注意问题](#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E6%B3%A8%E6%84%8F%E9%97%AE%E9%A2%98)
+  - [2 赋值运算符](#2-%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [3 比较运算符](#3-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [4 逻辑运算符](#4-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [5 位运算符](#5-%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [左移右移](#%E5%B7%A6%E7%A7%BB%E5%8F%B3%E7%A7%BB)
+    - [^异或运算](#%5E%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97)
+    - [~ 非](#-%E9%9D%9E)
+        - [附：负数计算](#%E9%99%84%E8%B4%9F%E6%95%B0%E8%AE%A1%E7%AE%97)
+    - [位运算符练习：](#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6%E7%BB%83%E4%B9%A0)
+      - [1.最有效率的方式算出2乘以8等于几？](#1%E6%9C%80%E6%9C%89%E6%95%88%E7%8E%87%E7%9A%84%E6%96%B9%E5%BC%8F%E7%AE%97%E5%87%BA2%E4%B9%98%E4%BB%A58%E7%AD%89%E4%BA%8E%E5%87%A0)
+      - [2.**对两个整数变量的值进行互换**(不需要第三方变量)](#2%E5%AF%B9%E4%B8%A4%E4%B8%AA%E6%95%B4%E6%95%B0%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC%E8%BF%9B%E8%A1%8C%E4%BA%92%E6%8D%A2%E4%B8%8D%E9%9C%80%E8%A6%81%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8F%98%E9%87%8F)
+  - [6 三元运算符](#6-%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【JAVA 运算符】

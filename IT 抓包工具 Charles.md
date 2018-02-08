@@ -1,3 +1,39 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [抓包工具 Charles](#%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7-charles)
+  - [一、Charles是什么？](#%E4%B8%80charles%E6%98%AF%E4%BB%80%E4%B9%88)
+  - [二、为什么是Charles？](#%E4%BA%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AFcharles)
+  - [三、Charles基本工作原理](#%E4%B8%89charles%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86)
+    - [1.普通http请求过程](#1%E6%99%AE%E9%80%9Ahttp%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B)
+    - [2.加入了Charles的HTTP代理的请求与响应过程](#2%E5%8A%A0%E5%85%A5%E4%BA%86charles%E7%9A%84http%E4%BB%A3%E7%90%86%E7%9A%84%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E8%BF%87%E7%A8%8B)
+  - [四、Charles的下载与安装过程](#%E5%9B%9Bcharles%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B)
+    - [1.官网下载地址：](#1%E5%AE%98%E7%BD%91%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80)
+    - [2.破解工具](#2%E7%A0%B4%E8%A7%A3%E5%B7%A5%E5%85%B7)
+  - [五、Http抓包操作步骤](#%E4%BA%94http%E6%8A%93%E5%8C%85%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
+    - [Step 1: 开启Charleshttp代理](#step-1-%E5%BC%80%E5%90%AFcharleshttp%E4%BB%A3%E7%90%86)
+    - [Step 2: 手机端Wifi添加代理](#step-2-%E6%89%8B%E6%9C%BA%E7%AB%AFwifi%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86)
+    - [a. Android手机：](#a-android%E6%89%8B%E6%9C%BA)
+    - [b. iOS手机：](#b-ios%E6%89%8B%E6%9C%BA)
+    - [Step 3:开启Charles录制功能](#step-3%E5%BC%80%E5%90%AFcharles%E5%BD%95%E5%88%B6%E5%8A%9F%E8%83%BD)
+    - [Step 4：启动应用开始抓包](#step-4%E5%90%AF%E5%8A%A8%E5%BA%94%E7%94%A8%E5%BC%80%E5%A7%8B%E6%8A%93%E5%8C%85)
+    - [Step 5：分析抓取的数据包](#step-5%E5%88%86%E6%9E%90%E6%8A%93%E5%8F%96%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8C%85)
+  - [六、Https抓包操作步骤](#%E5%85%ADhttps%E6%8A%93%E5%8C%85%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
+    - [Step 1：了解一下https的基本原理；](#step-1%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8Bhttps%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86)
+    - [Step 2：在手机端安装SSL证书](#step-2%E5%9C%A8%E6%89%8B%E6%9C%BA%E7%AB%AF%E5%AE%89%E8%A3%85ssl%E8%AF%81%E4%B9%A6)
+    - [Step 3：激活Charles的SSL代理](#step-3%E6%BF%80%E6%B4%BBcharles%E7%9A%84ssl%E4%BB%A3%E7%90%86)
+    - [Step 4：将指定的URL请求开启SSL代理功能](#step-4%E5%B0%86%E6%8C%87%E5%AE%9A%E7%9A%84url%E8%AF%B7%E6%B1%82%E5%BC%80%E5%90%AFssl%E4%BB%A3%E7%90%86%E5%8A%9F%E8%83%BD)
+  - [七、Charles进阶---修改请求也响应的内容](#%E4%B8%83charles%E8%BF%9B%E9%98%B6---%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E4%B9%9F%E5%93%8D%E5%BA%94%E7%9A%84%E5%86%85%E5%AE%B9)
+    - [Step 1：设置Charless断点](#step-1%E8%AE%BE%E7%BD%AEcharless%E6%96%AD%E7%82%B9)
+    - [Step 2：对指定的URL开启断点功能。](#step-2%E5%AF%B9%E6%8C%87%E5%AE%9A%E7%9A%84url%E5%BC%80%E5%90%AF%E6%96%AD%E7%82%B9%E5%8A%9F%E8%83%BD)
+    - [Step 3：编辑请求与响应的内容。](#step-3%E7%BC%96%E8%BE%91%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E7%9A%84%E5%86%85%E5%AE%B9)
+      - [a.编辑请求内容](#a%E7%BC%96%E8%BE%91%E8%AF%B7%E6%B1%82%E5%86%85%E5%AE%B9)
+      - [b.编辑服务器响应的内容](#b%E7%BC%96%E8%BE%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%93%8D%E5%BA%94%E7%9A%84%E5%86%85%E5%AE%B9)
+  - [八、Charles进阶---弱网模拟](#%E5%85%ABcharles%E8%BF%9B%E9%98%B6---%E5%BC%B1%E7%BD%91%E6%A8%A1%E6%8B%9F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 抓包工具 Charles
