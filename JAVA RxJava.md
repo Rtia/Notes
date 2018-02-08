@@ -126,7 +126,6 @@
 
 # 【JAVA RxJava】
 
-
 **GitHub 链接**：   
 https://github.com/ReactiveX/RxJava   
 https://github.com/ReactiveX/RxAndroid   
@@ -279,7 +278,7 @@ RxJava 的观察者模式大致如下图：
 Observer 即观察者，它决定事件触发的时候将有怎样的行为。 
 RxJava中的 **Observer接口**的**实现方式**：
 
-```
+```java
 Observer<String> observer = new Observer<String>() {
     @Override
     public void onNext(String s) {
@@ -301,7 +300,7 @@ Observer<String> observer = new Observer<String>() {
 除了 Observer 接口之外，RxJava还内置了一个实现了 Observer 的**抽象类**：**Subscriber**。
  Subscriber 对 Observer 接口进行了一些扩展，但他们的基本使用方式是完全一样的：
 
-```
+```java
 Subscriber<String> subscriber = new Subscriber<String>() {
     @Override
     public void onNext(String s) {
@@ -392,7 +391,7 @@ Observable observable = Observable.from(words);
 
 创建了 Observable 和 Observer 之后，再用 subscribe() 方法将它们联结起来，整条链子就可以工作了。代码形式很简单：
 
-```
+```java
 observable.subscribe(observer);
 // 或者：
 observable.subscribe(subscriber);
@@ -482,7 +481,7 @@ observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
 
 将字符串数组 names 中的所有字符串依次打印出来：
 
-```
+```java
 String[] names = ...;
 Observable.from(names)
         .subscribe(new Action1<String>() {
@@ -570,7 +569,7 @@ I/O操作（读写文件、读写数据库、网络信息交互等）所使用�
 
 文字叙述总归难理解，上代码：
 
-```
+```java
 Observable.just(1, 2, 3, 4)
         .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程
         .observeOn(AndroidSchedulers.mainThread()) // 指定 Subscriber 的回调发生在主线程
@@ -586,7 +585,7 @@ Observable.just(1, 2, 3, 4)
 事实上，这种在 subscribe() 之前写上两句 subscribeOn(Scheduler.io()) 和 observeOn(AndroidSchedulers.mainThread()) 的使用方式非常常见，它**适用于多数的『后台线程取数据，主线程显示』的程序策略**。
 而前面提到的由图片 id 取得图片并显示的例子，如果也加上这两句：
 
-```
+```java
 int drawableRes = ...;
 ImageView imageView = ...;
 Observable.create(new OnSubscribe<Drawable>() {
@@ -629,7 +628,7 @@ API。
 
 首先看一个 map() 的例子：
 
-```
+```java
 Observable.just("images/logo.png") // 输入类型 String
         .map(new Func1<String, Bitmap>() {
             @Override
@@ -651,7 +650,7 @@ Observable.just("images/logo.png") // 输入类型 String
 
 可以看到，map() 方法将参数中的 String 对象转换成一个 Bitmap 对象后返回，而在经过 map() 方法后，事件的参数类型也由 String转为了 Bitmap。这种直接变换对象并返回的，是最常见的也最容易理解的变换。
 
-- **map()**: **事件对象的直接变换**，具体功能上面已经介绍过。它是 RxJava最常用的变换。 
+- **map()**: **事件对象的直接变换**，具体功能上面已经介绍过。它是 RxJava**最常用的变换**。 
 
 ###### map() 的示意图：
 
@@ -663,7 +662,7 @@ Observable.just("images/logo.png") // 输入类型 String
 
 首先假设这么一种需求：假设有一个数据结构『学生』，现在需要打印出一组学生的名字。实现方式很简单：
 
-```
+```java
 Student[] students = ...;
 Subscriber<String> subscriber = new Subscriber<String>() {
     @Override
@@ -705,7 +704,7 @@ Observable.from(students)
 用 map() 显然是不行的，因为 **map() 是一对一的转化**，而我现在的要求是一对多的转化。
 那怎么才能把**一个**Student **转**化成**多个** Course 呢？这个时候，就需要用 **flatMap()** 了：
 
-```
+```java
 Student[] students = ...;
 Subscriber<Course> subscriber = new Subscriber<Course>() {
     @Override
@@ -739,15 +738,15 @@ flatMap() 示意图：
 
 扩展：由于可以在嵌套的 Observable 中添加异步代码， flatMap() 也常用于嵌套的异步操作，例如嵌套的网络请求。示例代码（Retrofit + RxJava）：
 
-```
+```java
 networkClient.token() // 返回 Observable<String>，在订阅时请求token，并在响应后发送 token
-.flatMap(new Func1<String, Observable<Messages>>() {
-    @Override
-    public Observable<Messages> call(String token) {
-// 返回Observable<Messages>，在订阅时请求消息列表，并在响应后发送请求到的消息列表
-        return networkClient.messages();
-    }
-})
+        .flatMap(new Func1<String, Observable<Messages>>() {
+            @Override
+            public Observable<Messages> call(String token) {
+        // 返回Observable<Messages>，在订阅时请求消息列表，并在响应后发送请求到的消息列表
+                return networkClient.messages();
+            }
+        })
         .subscribe(new Action1<Messages>() {
             @Override
             public void call(Messages messages) {
@@ -764,7 +763,7 @@ networkClient.token() // 返回 Observable<String>，在订阅时请求token，�
 在每次事件触发后的**一定时间间隔内丢弃新的事件**。
 常用作去**抖动过滤**，例如按钮的点击监听器：
 
-```
+```java
 RxView.clickEvents(button)    // RxBinding 代码，后面的文章有解释 
         .throttleFirst(500, TimeUnit.MILLISECONDS) // 设置防抖间隔为 500ms
         .subscribe(subscriber);//妈妈再也不怕我的用户手抖点开两个重复的界面啦。
@@ -811,7 +810,7 @@ public <R> Observable<R> lift (Operator < ? extends R, ?super T > operator){
   ![两次 lift](http://img.blog.csdn.net/20171230170920314?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
   举一个具体的 Operator 的实现。下面这是一个将事件中的 Integer 对象转换成 String 的例子，仅供参考：
 
-```
+```java
 observable.lift(new Observable.Operator<String, Integer>() {
     @Override
     public Subscriber<? super Integer> call(final Subscriber<? super String> subscriber) {
@@ -842,7 +841,7 @@ observable.lift(new Observable.Operator<String, Integer>() {
 它和 lift() 的区别在于， **lift()**是**针对事件项和事件序列**的，而 **compose()**是**针对Observable自身**进行变换。
 举个例子，假设在程序中有多个 Observable ，并且他们都需要应用一组相同的 lift() 变换。你可以这么写：
 
-```
+```java
 observable1
         .lift1()
         .lift2()
@@ -871,7 +870,7 @@ observable4
 
 你觉得这样太不软件工程了，于是你改成了这样：
 
-```
+```java
 private Observable liftAll (Observable observable){
     return observable
             .lift1()
@@ -888,7 +887,7 @@ liftAll(observable4).subscribe(subscriber4);
 
 可读性、可维护性都提高了。可是 Observable 被一个方法包起来，这种方式对于 Observale 的灵活性似乎还是增添了那么点限制。怎么办？这个时候，就应该用 compose() 来解决了：
 
-```
+```java
 public class LiftAllTransformer implements Observable.Transformer<Integer, String> {
     @Override
     public Observable<String> call(Observable<Integer> observable) {
@@ -920,7 +919,7 @@ RxJava 时的我）就问了：能不能多切换几次线程？
 答案是：能。因为 observeOn() 指定的是 Subscriber 的线程，而这个 Subscriber 并不是（严格说应该为『不一定是』，但这里不妨理解为『不是』）subscribe() 参数中的 Subscriber ，而是 observeOn() 执行时的当前 Observable 所对应的 Subscriber ，即它的直接下级 Subscriber 。换句话说，**observeOn() 指定的是它之后的操作所在的线程**。因此如果有**多次切换线程**的需求，只要**在每个想要切换线程的位置调用一次 observeOn() 即可**。
 上代码：
 
-```
+```java
 Observable.just(1, 2, 3, 4) // IO 线程，由 subscribeOn() 指定
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.newThread())
@@ -962,7 +961,7 @@ observeOn() 原理图：
 默认情况下， doOnSubscribe() 执行在 subscribe() 发生的线程；而如果**在 doOnSubscribe() 之后有 subscribeOn() 的话，它将执行在离它最近的 subscribeOn() 所指定的线程**。
 示例代码：
 
-```
+```java
 Observable.create(onSubscribe)
         .subscribeOn(Schedulers.io())
         .doOnSubscribe(new Action0() {
@@ -989,14 +988,14 @@ Retrofit 除了提供了传统的 Callback 形式的 API，还有 RxJava版本�
 以获取一个 User 对象的接口作为例子。
 使用Retrofit 的传统API，你可以用这样的方式来定义请求：
 
-```
+```java
 @GET("/user")
 public void getUser(@Query("userId") String userId, Callback<User> callback);
 ```
 
 在程序的构建过程中， Retrofit会把自动把方法实现并生成代码，然后开发者就可以利用下面的方法来获取特定用户并处理响应：
 
-```
+```java
 getUser(userId, new Callback<User>() {
     @Override
     public void success(User user) {
@@ -1012,7 +1011,7 @@ getUser(userId, new Callback<User>() {
 
 而使用 RxJava 形式的 API，定义同样的请求是这样的：
 
-```
+```java
 @GET("/user")
 public Observable<User> getUser(@Query("userId") String userId);
 
@@ -1020,7 +1019,7 @@ public Observable<User> getUser(@Query("userId") String userId);
 
 使用的时候是这样的：
 
-```
+```java
 getUser(userId)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Observer<User>() {
@@ -1047,7 +1046,7 @@ getUser(userId)
 比如：
 假设这么一种情况：你的程序取到的 User 并不应该直接显示，而是需要先与数据库中的数据进行比对和修正后再显示。使用 Callback方式大概可以这么写：
 
-```
+```java
 getUser(userId, new Callback<User>() {
     @Override
     public void success(User user) {
@@ -1067,7 +1066,7 @@ getUser(userId, new Callback<User>() {
 很简便，但不要这样做。为什么？因为这样做会影响性能。数据库的操作很重，一次读写操作花费
 10\~20ms是很常见的，这样的耗时很容易造成界面的卡顿。所以通常情况下，如果可以的话一定要避免在主线程中处理数据库。所以为了提升性能，这段代码可以优化一下：
 
-```
+```java
 getUser(userId, new Callback<User>() {
     @Override
     public void success(User user) {
@@ -1095,7 +1094,7 @@ getUser(userId, new Callback<User>() {
 性能问题解决，但……这代码实在是太乱了，迷之缩进啊！杂乱的代码往往不仅仅是美观问题，因为代码越乱往往就越难读懂，而如果项目中充斥着杂乱的代码，无疑会降低代码的可读性，造成团队开发效率的降低和出错率的升高。
 这时候，如果用 RxJava 的形式，就好办多了。 RxJava 形式的代码是这样的：
 
-```
+```java
 getUser(userId)
     .doOnNext(new Action1<User>() {
         @Override
@@ -1126,7 +1125,7 @@ getUser(userId)
 再举一个例子：假设 /user 接口并不能直接访问，而需要填入一个在线获取的 token ，代码应该怎么写？
 Callback 方式，可以使用嵌套的 Callback：
 
-```
+```java
 @GET("/token")
 public void getToken(Callback<String> callback);
 
@@ -1164,7 +1163,7 @@ getToken(new Callback<String>() {
 倒是没有什么性能问题，可是迷之缩进毁一生，你懂我也懂，做过大项目的人应该更懂。
 而使用 RxJava 的话，代码是这样的：
 
-```
+```java
 @GET("/token")
 public Observable<String> getToken();
 
@@ -1209,7 +1208,7 @@ getToken()
 [RxBinding](https://github.com/JakeWharton/RxBinding) 是 Jake Wharton的一个开源库，它提供了一套在 Android 平台上的基于 RxJava 的 Binding API。所谓Binding，就是类似设置 OnClickListener 、设置 TextWatcher 这样的注册绑定对象的API。
 举个设置点击监听的例子。使用 RxBinding ，可以把事件监听用这样的方法来设置：
 
-```
+```java
 Button button = ...;
 RxView.clickEvents(button) // 以 Observable 形式来反馈点击事件
     .subscribe(new Action1<ViewClickEvent>() {
@@ -1218,16 +1217,14 @@ RxView.clickEvents(button) // 以 Observable 形式来反馈点击事件
             // Click handling
         }
     });
-
 ```
 
 看起来除了形式变了没什么区别，实质上也是这样。甚至如果你看一下它的源码，你会发现它连实现都没什么惊喜：它的内部是直接用一个包裹着的 setOnClickListener() 来实现的。然而，仅仅这一个形式的改变，却恰好就是 RxBinding 的目的：扩展性。通过 RxBinding 把点击监听转换成 Observable 之后，就有了对它进行扩展的可能。扩展的方式有很多，根据需求而定。一个例子是前面提到过的 throttleFirst() ，用于去抖动，也就是消除手抖导致的快速连环点击：
 
-```
+```java
 RxView.clickEvents(button)
     .throttleFirst(500, TimeUnit.MILLISECONDS)
     .subscribe(clickAction);
-
 ```
 
 如果想对 RxBinding 有更多了解，可以去它的 [GitHub项目](https://github.com/JakeWharton/RxBinding) 下面看看。
@@ -1245,7 +1242,7 @@ RxBus，可以看[这篇文章](http://nerds.weddingpartyapp.com/tech/2014/12/24
 
 ### merge操作符，合并观察对象
 
-```
+```java
 List<String> list1 = new ArrayList<>() ;
 List<String> list2 = new ArrayList<>() ;
 
@@ -1278,7 +1275,7 @@ observable.subscribe(new Action1() {
 
 ### zip  操作符，合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据
 
-```
+```java
 List<String> list1 = new ArrayList<>() ;
 List<String> list2 = new ArrayList<>() ;
 
@@ -1315,7 +1312,7 @@ observable3.subscribe(new Action1() {
 
 ### scan累加器操作符
 
-```
+```java
 Observable observable = Observable.just( 1 , 2 , 3 , 4 , 5  ) ;
 observable.scan(new Func2<Integer,Integer,Integer>() {
            @Override
@@ -1338,7 +1335,7 @@ observable.scan(new Func2<Integer,Integer,Integer>() {
 
 ### filter 过滤操作符的使用
 
-```
+```java
 Observable observable = Observable.just( 1 , 2 , 3 , 4 , 5 , 6 , 7 ) ;
 observable.filter(new Func1<Integer , Boolean>() {
     @Override
@@ -1373,7 +1370,7 @@ observable.filter(new Func1<Integer , Boolean>() {
 
 #### skipLast() 跳过最后n个数据，发送前面的数据
 
-```
+```java
 //take 发送前3个数据
 Observable observable = Observable.just( 1 , 2 , 3 , 4 , 5 , 6 , 7 ) ;
 observable.take( 3 )
@@ -1441,7 +1438,7 @@ observable5.skipLast( 2 )
 
 ### elementAt 、elementAtOrDefault发送数据序列中第n个数据
 
-```
+```java
 //elementAt() 发送数据序列中第n个数据 ，序列号从0开始
 //如果该序号大于数据序列中的最大序列号，则会抛出异常，程序崩溃
 //所以在用elementAt操作符的时候，要注意判断发送的数据序列号是否越界
@@ -1473,7 +1470,7 @@ observable9.elementAtOrDefault(  8 , 666  )
 
 ### startWith() 插入数据
 
-```
+```java
 //插入普通数据
 //startWith 数据序列的开头插入一条指定的项 , 最多插入9条数据
 Observable observable = Observable.just( "aa" , "bb" , "cc" ) ;
@@ -1505,7 +1502,7 @@ observable.startWith( Observable.from( list ))
 
 ### delay操作符，延迟数据发送
 
-```
+```java
 Observable<String> observable = Observable.just( "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" ) ;
 //延迟数据发射的时间，仅仅延时一次，也就是发射第一个数据前延时。发射后面的数据不延时
 observable.delay( 3 , TimeUnit.SECONDS )  //延迟3秒钟
@@ -1522,7 +1519,7 @@ observable.delay( 3 , TimeUnit.SECONDS )  //延迟3秒钟
 
 使用场景：xx秒后，执行xx     
 
-```
+```java
 //5秒后输出 hello world , 然后显示一张图片
 Observable.timer( 5 , TimeUnit.SECONDS )
 		.observeOn(AndroidSchedulers.mainThread() )
@@ -1536,7 +1533,7 @@ Observable.timer( 5 , TimeUnit.SECONDS )
 
 ```
 
-```
+```java
 timer 返回一个 Observable , 它在延迟一段给定的时间后发射一个简单的数字0
 timer 操作符默认在computation调度器上执行，当然也可以用 Scheduler在定义执行的线程。
 
@@ -1551,7 +1548,7 @@ timer 操作符默认在computation调度器上执行，当然也可以用 Sched
 
 ### interval 轮询操作符，循环发送数据，数据从0开始递增
 
-```
+``` java
 public class IntervalActivity extends AppCompatActivity { 
     Subscription subscription ;
  
@@ -1587,7 +1584,7 @@ public class IntervalActivity extends AppCompatActivity {
 
 使用场景：从网络请求数据，在数据被展示前，缓存到本地
 
-```
+``` java
 Observable observable = Observable.just( "1" , "2" , "3" , "4" ) ;
 observable.doOnNext(new Action1() {
    @Override
@@ -1623,7 +1620,7 @@ observable.doOnNext(new Action1() {
 
 使用场景：一个按钮每点击3次，弹出一个toast      
 
-```
+``` java
 List<String> list = new ArrayList<>();
 for (int i = 1; i < 10; i++) {
   list.add("" + i);
@@ -1651,7 +1648,7 @@ observable
 
 **例子2：** 
 
-```
+``` java
 //第1、2 个数据打成一个数据包，跳过第三个数据 ； 第4、5个数据打成一个包，跳过第6个数据
 observable.buffer( 2 , 3 )  //把每两个数据为一组打成一个包，然后发送。第三个数据跳过去
 	   .subscribe(new Action1<List<String>>() {
@@ -1678,7 +1675,7 @@ observable.buffer( 2 , 3 )  //把每两个数据为一组打成一个包，然�
 1、button按钮防抖操作，防连续点击  
 2、百度关键词联想，在一段时间内只联想一次，防止频繁请求服务器   
 
-```
+``` java
  Observable.interval( 1 , TimeUnit.SECONDS)
 			.throttleFirst( 3 , TimeUnit.SECONDS )
 			.subscribe(new Action1<Long>() {
@@ -1724,7 +1721,7 @@ Observable.from( list )
 
 **distinctUntilChanged**()  过滤连续重复的数据
 
-```
+``` java
 List<String> list = new ArrayList<>() ;
 list.add( "1" ) ;
 list.add( "2" ) ;
@@ -1764,18 +1761,13 @@ Observable.from( list )
 1. doOnSubscribe()默认运行在事件产生的线程里面，然而事件产生的线程一般都会运行在 io
    线程里。那么这个时候做一些，更新UI的操作，是线程不安全的。
 
-   ```
-              所以如果事件产生的线程是io线程，但是我们又要在doOnSubscribe()
-
-   ```
-
-   更新UI ，这时候就需要线程切换。
+   >- 所以如果事件产生的线程是io线程，但是我们又要在doOnSubscribe()更新UI ，这时候就需要线程切换。
 
 2. 如果在 doOnSubscribe() 之后有 subscribeOn() 的话，它将执行在离它最近的 subscribeOn() 所指定的线程。 
 
 3. subscribeOn() ：事件产生的线程 ； observeOn() : 事件消费的线程
 
-```
+``` java
 Observable.create(onSubscribe)
 .subscribeOn(Schedulers.io())
 .doOnSubscribe(new Action0() {
@@ -1794,7 +1786,7 @@ Observable.create(onSubscribe)
 
 首先看range 方法的源码
 
-```
+``` java
 public static Observable<Integer> range(int start, int count) {
      if (count < 0) {
          throw new IllegalArgumentException("Count can not be negative");
@@ -1824,7 +1816,7 @@ RxJava将这个操作符实现为range函数，它接受两个参数，一个是
 range默认不在任何特定的调度器上执行。有一个变体可以通过可选参数指定Scheduler。
 **例子**
 
-```
+``` java
 Observable.range( 10 , 3 )
 		  .subscribe(new Action1<Integer>() {
 			  @Override
@@ -1848,7 +1840,7 @@ Observable.range( 10 , 3 )
 
 例子
 
-```
+``` java
 public class DeferActivity extends AppCompatActivity {
  
     String i = "10" ;
@@ -1907,7 +1899,7 @@ public class DeferActivity extends AppCompatActivity {
 
 ### 取消订阅 subscription.unsubscribe() ;
 
-```
+``` java
 public class MainActivity extends AppCompatActivity {
 
     Subscription subscription ;
@@ -1956,7 +1948,7 @@ public class MainActivity extends AppCompatActivity {
 
 在子类使用Observable中的**compose**操作符，调用，完成Observable发布的事件和当前的组件绑定，实现生命周期同步。从而实现当前组件生命周期结束时，自动取消对Observable订阅。
 
-```
+``` java
 public class MainActivity extends RxAppCompatActivity {
         TextView textView ;
         
@@ -2000,7 +1992,7 @@ public class MainActivity extends RxAppCompatActivity {
 - ActivityEvent.STOP:在Activity的onStop()方法执行后，解除绑定。
 - ActivityEvent.DESTROY:在Activity的onDestroy()方法执行后，解除绑定。
 
-```
+``` java
  //循环发送数字
  Observable.interval(0, 1, TimeUnit.SECONDS)
 		 .subscribeOn( Schedulers.io())
@@ -2022,7 +2014,7 @@ public class MainActivity extends RxAppCompatActivity {
 
 这个类是专门**处理订阅事件与Fragment生命周期同步**的大杀器
 
-```
+``` java
 public enum FragmentEvent {
 ATTACH,
 CREATE,
@@ -2058,14 +2050,12 @@ DETACH
 
 ```
 compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-
 ```
 
 v4'support-v4' library bindings:
 
 ```
 compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
-
 ```
 
 'appcompat-v7' library bindings:
@@ -2079,14 +2069,13 @@ compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
 
 ```
 compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
-
 ```
 
 ### 代码示例
 
 #### Button 防抖处理
 
-```
+``` java
  button = (Button) findViewById( R.id.bt ) ;
  RxView.clicks( button )
 		 .throttleFirst( 2 , TimeUnit.SECONDS )   //两秒钟之内只取一个点击事件，防抖操作
@@ -2101,7 +2090,7 @@ compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
 
 #### 按钮的长按时间监听
 
-```
+``` java
  button = (Button) findViewById( R.id.bt ) ;
  //监听长按时间
  RxView.longClicks( button)
@@ -2167,7 +2156,7 @@ http://o7rvuansr.bkt.clouddn.com/rxbindingGIF.gif
 
 #### 搜索的时候，关键词联想功能 。debounce()在一定的时间内没有操作就会发送事件。
 
-```
+``` java
 editText = (EditText) findViewById( R.id.editText );
  listView = (ListView) findViewById( R.id.listview );
 
@@ -2231,7 +2220,7 @@ http://o7rvuansr.bkt.clouddn.com/rxbinding_edGIF.gif
 
 **例1**
 
-```
+``` java
 Observable
    .create(new Observable.OnSubscribe<String>() {
 	   @Override
@@ -2269,7 +2258,7 @@ Observable
 
 **例2**
 
-```
+``` java
  new Thread(new Runnable() {
 	   @Override
 	   public void run() {
@@ -2324,7 +2313,7 @@ void rx(){
 
 **例3**
 
-```
+``` java
 Observable
    .create(new Observable.OnSubscribe<String>() {
 	   @Override
@@ -2363,7 +2352,7 @@ Observable
 
 **例4**
 
-```
+``` java
 Observable
    .create(new Observable.OnSubscribe<String>() {
 	   @Override
@@ -2402,16 +2391,12 @@ Observable
 
 #### 结论
 
-> - 通过例3、例4 可以看出  .**subscribeOn**(Schedulers.io())和 .**observeOn**(AndroidSchedulers.mainThread())写的**位置不一样**，造成的**结果**也**不一样**。
+> 通过例3、例4 可以看出  .**subscribeOn**(Schedulers.io())和 .**observeOn**(AndroidSchedulers.mainThread())写的**位置不一样**，造成的**结果**也**不一样**。
 >   从例4中可以看出 map()操作符默认运行在事件产生的线程之中。事件消费只是在 subscribe（） 里面。
 
 - 对于 **create() , just() , from**()   等                 --- 事件**产生**   
-
-  ```
-    **map() , flapMap() , scan() , filter**()  等    --  事件**加工**
-   **subscribe**()                                          --  事件**消费**
-
-  ```
+- **map() , flapMap() , scan() , filter**()  等    --  事件**加工**
+- **subscribe**()                                          --  事件**消费**
 
 - 事件**产生**：默认运行在**当前线程**，可以由 **subscribeOn**()  自定义线程
   事件**加工**：默认跟事件**产生**的线程保持**一致**, 可以由 **observeOn**() 自定义线程
@@ -2421,7 +2406,7 @@ Observable
 
 **例5  **
 
-```
+``` java
 Observable
 	.create(new Observable.OnSubscribe<String>() {
 		@Override
@@ -2476,7 +2461,7 @@ Observable
 
 **例6：**
 
-```
+``` java
 Observable
 	 .create(new Observable.OnSubscribe<String>() {
 		 @Override
@@ -2507,7 +2492,7 @@ Observable
 
 **例:7：**
 
-```
+``` java
 Observable
    .create(new Observable.OnSubscribe<String>() {
 	   @Override
@@ -2546,7 +2531,7 @@ Observable
 
 #### 一般的用法：
 
-```
+``` java
 Observable
 	 .just( "123" )
 	 .subscribeOn( Schedulers.io())
@@ -2561,7 +2546,7 @@ Observable
 
 #### 简单的封装
 
-```
+``` java
 public Observable apply( Observable observable ){
    return observable.subscribeOn( Schedulers.io() )
             .observeOn( AndroidSchedulers.mainThread() ) ;
@@ -2571,7 +2556,7 @@ public Observable apply( Observable observable ){
 
 **使用**
 
-```
+``` java
 apply( Observable.just( "123" ) )
               .subscribe(new Action1() {
                   @Override
@@ -2599,7 +2584,7 @@ Observable.Transformer schedulersTransformer = new  Observable.Transformer() {
 
 **使用**
 
-```
+``` java
 Observable
           .just( "123" )
           .compose( schedulersTransformer )
@@ -2615,7 +2600,7 @@ Observable
 
 #### 最优改进后的封装
 
-```
+``` java
 public class RxUtil { 
     private final static Observable.Transformer schedulersTransformer 
     = new  Observable.Transformer() {
@@ -2635,7 +2620,7 @@ public class RxUtil {
 
 **使用**
 
-```
+``` java
 Observable
 	.just( "123" )
 	.compose( RxUtil.<String>applySchedulers() )
@@ -2657,6 +2642,8 @@ Observable
 [Meizhi Android之RxJava &Retrofit最佳实践](http://www.apkbus.com/blog-705730-60599.html)
 
 **相关代码**： <http://git.oschina.net/zyj1609/RxAndroid_RxJava>  
+
+
 
 
 
