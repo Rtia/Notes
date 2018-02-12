@@ -26,4 +26,6 @@ GitHub中的markdown文件直接写[TOC]是无法生成目录的，可以使用�
 
   `doctoc README.md`
 
+  `doctoc CONTRIBUTING.md LICENSE.md`
+
   `doctoc D:\Develop\Documents\Notes\CSDN笔记\JAVARxJava.md`
