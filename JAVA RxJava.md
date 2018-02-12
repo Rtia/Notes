@@ -637,7 +637,35 @@ networkClient.token() // 返回 Observable<String>，在订阅时请求token，�
 ##### throttleFirst():
 
 在每次事件触发后的**一定时间间隔内丢弃新的事件**。
-常用作去**抖动过滤**，例如按钮的点击监听器：
+
+在响应完第一次事件后，隔一段时间再响应事件（中间发送来的事件都被忽略掉了）
+
+```java
+Observable.create(new Observable.OnSubscribe<Integer>() {
+	@Override
+	public void call(Subscriber<? super Integer> subscriber) {
+		for (int i = 0; i < 20; i++) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			subscriber.onNext(i);
+		}
+		subscriber.onCompleted();
+	}
+}).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(i -> System.out.println(" throttleFirst:" + i));
+```
+结果：
+
+```java
+ throttleFirst:0
+ throttleFirst:5
+ throttleFirst:10
+ throttleFirst:15
+```
+
+###### 常用作去**抖动过滤**，例如按钮的点击监听器：
 
 ```java
 RxView.clickEvents(button)    // RxBinding 代码，后面的文章有解释 
@@ -1149,7 +1177,7 @@ observable.subscribe(new Action1() {
 
 ![](http://img.blog.csdn.net/20171231014104929?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### zip  操作符，合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据
+### zip  操作符，合并多个观察对象的数据。并且允许 Func2()函数重新发送合并后的数据
 
 ```java
 List<String> list1 = new ArrayList<>() ;
@@ -1391,7 +1419,7 @@ observable.delay( 3 , TimeUnit.SECONDS )  //延迟3秒钟
 
 ```
 
-### Timer  延时操作符的使用
+### timer  延时操作符的使用
 
 使用场景：xx秒后，执行xx     
 
@@ -1412,7 +1440,6 @@ Observable.timer( 5 , TimeUnit.SECONDS )
 ```java
 timer 返回一个 Observable , 它在延迟一段给定的时间后发射一个简单的数字0
 timer 操作符默认在computation调度器上执行，当然也可以用 Scheduler在定义执行的线程。
-
 ```
 
 #### delay vs timer
@@ -2507,6 +2534,14 @@ Observable
 	}) ;
 
 ```
+
+
+
+## 实例
+
+
+
+
 
 ## 相关推荐
 
