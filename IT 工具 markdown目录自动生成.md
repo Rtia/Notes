@@ -22,4 +22,8 @@ GitHub中的markdown文件直接写[TOC]是无法生成目录的，可以使用�
 
 6. 对文件夹中单个文件生成目录（文件名中间不能有空格）
   `doctoc /path/to/file [...]`
-  如：`doctoc README.md`
+  如：
+
+  `doctoc README.md`
+
+  `doctoc D:\Develop\Documents\Notes\CSDN笔记\JAVARxJava.md`

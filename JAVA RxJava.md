@@ -1,3 +1,127 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [【JAVA RxJava】](#java-rxjava)
+  - [RxJava 到底是什么](#rxjava-%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88)
+  - [RxJava 好在哪](#rxjava-%E5%A5%BD%E5%9C%A8%E5%93%AA)
+  - [API介绍和原理简析](#api%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90)
+    - [1. 概念：扩展的观察者模式](#1-%E6%A6%82%E5%BF%B5%E6%89%A9%E5%B1%95%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F)
+      - [观察者模式](#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F)
+      - [RxJava 的观察者模式](#rxjava-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F)
+        - [onCompleted和onError](#oncompleted%E5%92%8Conerror)
+      - [](#)
+    - [2. 基本实现](#2-%E5%9F%BA%E6%9C%AC%E5%AE%9E%E7%8E%B0)
+      - [1) 创建 Observer](#1-%E5%88%9B%E5%BB%BA-observer)
+        - [Subscriber](#subscriber)
+        - [Observer  vs  Subscriber](#observer--vs--subscriber)
+      - [2) 创建 Observable](#2-%E5%88%9B%E5%BB%BA-observable)
+        - [创建事件队列方法](#%E5%88%9B%E5%BB%BA%E4%BA%8B%E4%BB%B6%E9%98%9F%E5%88%97%E6%96%B9%E6%B3%95)
+          - [**create**()](#create)
+          - [**just**(T...)](#justt)
+          - [**from**(T[]) / from(Iterable<? extends T>) :](#fromt--fromiterable-extends-t-)
+        - [](#-1)
+      - [3) Subscribe (订阅)](#3-subscribe-%E8%AE%A2%E9%98%85)
+        - [**Observable.subscribe(Subscriber)** 的**内部实现**：](#observablesubscribesubscriber-%E7%9A%84%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0)
+        - [不完整定义的回调](#%E4%B8%8D%E5%AE%8C%E6%95%B4%E5%AE%9A%E4%B9%89%E7%9A%84%E5%9B%9E%E8%B0%83)
+          - [**Action0**](#action0)
+          - [**Action1**](#action1)
+        - [](#-2)
+      - [4) 场景示例](#4-%E5%9C%BA%E6%99%AF%E7%A4%BA%E4%BE%8B)
+        - [a. 打印字符串数组](#a-%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84)
+        - [b. 由 id 取得图片并显示](#b-%E7%94%B1-id-%E5%8F%96%E5%BE%97%E5%9B%BE%E7%89%87%E5%B9%B6%E6%98%BE%E7%A4%BA)
+      - [](#-3)
+    - [3. 线程控制 —— Scheduler (一)](#3-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6--scheduler-%E4%B8%80)
+      - [1) Scheduler 的 API (一)](#1-scheduler-%E7%9A%84-api-%E4%B8%80)
+        - [**Schedulers.immediate**():](#schedulersimmediate)
+        - [**Schedulers.newThread**():](#schedulersnewthread)
+        - [**Schedulers.io**():](#schedulersio)
+        - [**Schedulers.computation**():](#schedulerscomputation)
+        - [**AndroidSchedulers.mainThread**()](#androidschedulersmainthread)
+        - [**subscribeOn**():](#subscribeon)
+        - [**observeOn**():](#observeon)
+      - [](#-4)
+    - [4. 变换](#4-%E5%8F%98%E6%8D%A2)
+      - [1) API](#1-api)
+        - [map()](#map)
+          - [map() 的示意图：](#map-%E7%9A%84%E7%A4%BA%E6%84%8F%E5%9B%BE)
+        - [flatMap()](#flatmap)
+          - [flatMap() 原理：](#flatmap-%E5%8E%9F%E7%90%86)
+        - [throttleFirst():](#throttlefirst)
+      - [2) 变换的原理：lift()](#2-%E5%8F%98%E6%8D%A2%E7%9A%84%E5%8E%9F%E7%90%86lift)
+      - [3) compose: 对 Observable 整体的变换](#3-compose-%E5%AF%B9-observable-%E6%95%B4%E4%BD%93%E7%9A%84%E5%8F%98%E6%8D%A2)
+    - [5. 线程控制：Scheduler (二)](#5-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6scheduler-%E4%BA%8C)
+      - [1) Scheduler 的 API (二)](#1-scheduler-%E7%9A%84-api-%E4%BA%8C)
+      - [2) Scheduler 的原理（二）](#2-scheduler-%E7%9A%84%E5%8E%9F%E7%90%86%E4%BA%8C)
+      - [3) 延伸：doOnSubscribe()](#3-%E5%BB%B6%E4%BC%B8doonsubscribe)
+    - [](#-5)
+  - [RxJava 的适用场景和使用方式](#rxjava-%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E5%92%8C%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)
+    - [1. 与 Retrofit 的结合](#1-%E4%B8%8E-retrofit-%E7%9A%84%E7%BB%93%E5%90%88)
+    - [2. RxBinding](#2-rxbinding)
+    - [3. 各种异步操作](#3-%E5%90%84%E7%A7%8D%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C)
+    - [4. RxBus](#4-rxbus)
+  - [操作符的使用](#%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8)
+    - [merge操作符，合并观察对象](#merge%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%90%88%E5%B9%B6%E8%A7%82%E5%AF%9F%E5%AF%B9%E8%B1%A1)
+    - [zip  操作符，合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据](#zip--%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA%E8%A7%82%E5%AF%9F%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B9%B6%E4%B8%94%E5%85%81%E8%AE%B8-func2%E5%87%BD%E6%95%B0%E9%87%8D%E6%96%B0%E5%8F%91%E9%80%81%E5%90%88%E5%B9%B6%E5%90%8E%E7%9A%84%E6%95%B0%E6%8D%AE)
+    - [scan累加器操作符](#scan%E7%B4%AF%E5%8A%A0%E5%99%A8%E6%93%8D%E4%BD%9C%E7%AC%A6)
+    - [filter 过滤操作符的使用](#filter-%E8%BF%87%E6%BB%A4%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8)
+    - [消息数量过滤操作符的使用](#%E6%B6%88%E6%81%AF%E6%95%B0%E9%87%8F%E8%BF%87%E6%BB%A4%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8)
+      - [take ：取前n个数据](#take-%E5%8F%96%E5%89%8Dn%E4%B8%AA%E6%95%B0%E6%8D%AE)
+      - [takeLast：取后n个数据](#takelast%E5%8F%96%E5%90%8En%E4%B8%AA%E6%95%B0%E6%8D%AE)
+      - [first 只发送第一个数据](#first-%E5%8F%AA%E5%8F%91%E9%80%81%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE)
+      - [last 只发送最后一个数据](#last-%E5%8F%AA%E5%8F%91%E9%80%81%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE)
+      - [skip() 跳过前n个数据发送后面的数据](#skip-%E8%B7%B3%E8%BF%87%E5%89%8Dn%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%8F%91%E9%80%81%E5%90%8E%E9%9D%A2%E7%9A%84%E6%95%B0%E6%8D%AE)
+      - [skipLast() 跳过最后n个数据，发送前面的数据](#skiplast-%E8%B7%B3%E8%BF%87%E6%9C%80%E5%90%8En%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%8F%91%E9%80%81%E5%89%8D%E9%9D%A2%E7%9A%84%E6%95%B0%E6%8D%AE)
+    - [elementAt 、elementAtOrDefault发送数据序列中第n个数据](#elementat-elementatordefault%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE%E5%BA%8F%E5%88%97%E4%B8%AD%E7%AC%ACn%E4%B8%AA%E6%95%B0%E6%8D%AE)
+    - [startWith() 插入数据](#startwith-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE)
+    - [delay操作符，延迟数据发送](#delay%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%BB%B6%E8%BF%9F%E6%95%B0%E6%8D%AE%E5%8F%91%E9%80%81)
+    - [Timer  延时操作符的使用](#timer--%E5%BB%B6%E6%97%B6%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8)
+      - [delay vs timer](#delay-vs-timer)
+    - [interval 轮询操作符，循环发送数据，数据从0开始递增](#interval-%E8%BD%AE%E8%AF%A2%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%BE%AA%E7%8E%AF%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE%E6%95%B0%E6%8D%AE%E4%BB%8E0%E5%BC%80%E5%A7%8B%E9%80%92%E5%A2%9E)
+    - [doOnNext() 操作符，在每次 OnNext() 方法被调用前执行](#doonnext-%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%9C%A8%E6%AF%8F%E6%AC%A1-onnext-%E6%96%B9%E6%B3%95%E8%A2%AB%E8%B0%83%E7%94%A8%E5%89%8D%E6%89%A7%E8%A1%8C)
+    - [Buffer 操作符](#buffer-%E6%93%8D%E4%BD%9C%E7%AC%A6)
+    - [throttleFirst 操作符在一段时间内，只取第一个事件，然后其他事件都丢弃。](#throttlefirst-%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%9C%A8%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4%E5%86%85%E5%8F%AA%E5%8F%96%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BA%8B%E4%BB%B6%E7%84%B6%E5%90%8E%E5%85%B6%E4%BB%96%E4%BA%8B%E4%BB%B6%E9%83%BD%E4%B8%A2%E5%BC%83)
+    - [distinct    过滤重复的数据](#distinct----%E8%BF%87%E6%BB%A4%E9%87%8D%E5%A4%8D%E7%9A%84%E6%95%B0%E6%8D%AE)
+    - [debounce() 操作符一段时间内没有变化，就会发送一个数据](#debounce-%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4%E5%86%85%E6%B2%A1%E6%9C%89%E5%8F%98%E5%8C%96%E5%B0%B1%E4%BC%9A%E5%8F%91%E9%80%81%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE)
+    - [doOnSubscribe()](#doonsubscribe)
+    - [range 操作符](#range-%E6%93%8D%E4%BD%9C%E7%AC%A6)
+    - [defer 操作符](#defer-%E6%93%8D%E4%BD%9C%E7%AC%A6)
+  - [生命周期控制和内存优化](#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%8E%A7%E5%88%B6%E5%92%8C%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96)
+    - [取消订阅 subscription.unsubscribe() ;](#%E5%8F%96%E6%B6%88%E8%AE%A2%E9%98%85-subscriptionunsubscribe-)
+    - [线程调度](#%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6)
+    - [rxlifecycle 框架的使用](#rxlifecycle-%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BD%BF%E7%94%A8)
+      - [**bindToLifecycle** 方法](#bindtolifecycle-%E6%96%B9%E6%B3%95)
+      - [**bindUntilEvent**( ActivityEvent event)](#binduntilevent-activityevent-event)
+      - [FragmentEvent](#fragmentevent)
+    - [](#-6)
+  - [RxBinding](#rxbinding)
+    - [git地址](#git%E5%9C%B0%E5%9D%80)
+    - [androidStudio 使用](#androidstudio-%E4%BD%BF%E7%94%A8)
+    - [代码示例](#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B)
+      - [Button 防抖处理](#button-%E9%98%B2%E6%8A%96%E5%A4%84%E7%90%86)
+      - [按钮的长按时间监听](#%E6%8C%89%E9%92%AE%E7%9A%84%E9%95%BF%E6%8C%89%E6%97%B6%E9%97%B4%E7%9B%91%E5%90%AC)
+      - [listView 的点击事件、长按事件处理](#listview-%E7%9A%84%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6%E9%95%BF%E6%8C%89%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86)
+      - [用户登录界面，勾选同意隐私协议，登录按钮就变高亮](#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%8B%BE%E9%80%89%E5%90%8C%E6%84%8F%E9%9A%90%E7%A7%81%E5%8D%8F%E8%AE%AE%E7%99%BB%E5%BD%95%E6%8C%89%E9%92%AE%E5%B0%B1%E5%8F%98%E9%AB%98%E4%BA%AE)
+      - [搜索的时候，关键词联想功能 。debounce()在一定的时间内没有操作就会发送事件。](#%E6%90%9C%E7%B4%A2%E7%9A%84%E6%97%B6%E5%80%99%E5%85%B3%E9%94%AE%E8%AF%8D%E8%81%94%E6%83%B3%E5%8A%9F%E8%83%BD-debounce%E5%9C%A8%E4%B8%80%E5%AE%9A%E7%9A%84%E6%97%B6%E9%97%B4%E5%86%85%E6%B2%A1%E6%9C%89%E6%93%8D%E4%BD%9C%E5%B0%B1%E4%BC%9A%E5%8F%91%E9%80%81%E4%BA%8B%E4%BB%B6)
+    - [](#-7)
+  - [线程调度实例](#%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%AE%9E%E4%BE%8B)
+    - [Rxjava默认运行的线程](#rxjava%E9%BB%98%E8%AE%A4%E8%BF%90%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B)
+      - [结论](#%E7%BB%93%E8%AE%BA)
+    - [subscribeOn、observeOn对线程影响](#subscribeonobserveon%E5%AF%B9%E7%BA%BF%E7%A8%8B%E5%BD%B1%E5%93%8D)
+      - [结论](#%E7%BB%93%E8%AE%BA-1)
+    - [多次切换线程](#%E5%A4%9A%E6%AC%A1%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B)
+    - [只规定了事件产生的线程](#%E5%8F%AA%E8%A7%84%E5%AE%9A%E4%BA%86%E4%BA%8B%E4%BB%B6%E4%BA%A7%E7%94%9F%E7%9A%84%E7%BA%BF%E7%A8%8B)
+    - [只规定事件消费线程](#%E5%8F%AA%E8%A7%84%E5%AE%9A%E4%BA%8B%E4%BB%B6%E6%B6%88%E8%B4%B9%E7%BA%BF%E7%A8%8B)
+      - [结论](#%E7%BB%93%E8%AE%BA-2)
+    - [线程调度封装](#%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%B0%81%E8%A3%85)
+      - [一般的用法：](#%E4%B8%80%E8%88%AC%E7%9A%84%E7%94%A8%E6%B3%95)
+      - [简单的封装](#%E7%AE%80%E5%8D%95%E7%9A%84%E5%B0%81%E8%A3%85)
+      - [改进后的封装](#%E6%94%B9%E8%BF%9B%E5%90%8E%E7%9A%84%E5%B0%81%E8%A3%85)
+      - [最优改进后的封装](#%E6%9C%80%E4%BC%98%E6%94%B9%E8%BF%9B%E5%90%8E%E7%9A%84%E5%B0%81%E8%A3%85)
+  - [相关推荐](#%E7%9B%B8%E5%85%B3%E6%8E%A8%E8%8D%90)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 # 【JAVA RxJava】
@@ -616,13 +740,13 @@ flatMap() 示意图：
 
 ```java
 networkClient.token() // 返回 Observable<String>，在订阅时请求token，并在响应后发送 token
-        .flatMap(new Func1<String, Observable<Messages>>() {
-            @Override
-            public Observable<Messages> call(String token) {
-        // 返回Observable<Messages>，在订阅时请求消息列表，并在响应后发送请求到的消息列表
-                return networkClient.messages();
-            }
-        })
+.flatMap(new Func1<String, Observable<Messages>>() {
+    @Override
+    public Observable<Messages> call(String token) {
+// 返回Observable<Messages>，在订阅时请求消息列表，并在响应后发送请求到的消息列表
+        return networkClient.messages();
+    }
+})
         .subscribe(new Action1<Messages>() {
             @Override
             public void call(Messages messages) {
@@ -637,35 +761,7 @@ networkClient.token() // 返回 Observable<String>，在订阅时请求token，�
 ##### throttleFirst():
 
 在每次事件触发后的**一定时间间隔内丢弃新的事件**。
-
-在响应完第一次事件后，隔一段时间再响应事件（中间发送来的事件都被忽略掉了）
-
-```java
-Observable.create(new Observable.OnSubscribe<Integer>() {
-	@Override
-	public void call(Subscriber<? super Integer> subscriber) {
-		for (int i = 0; i < 20; i++) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			subscriber.onNext(i);
-		}
-		subscriber.onCompleted();
-	}
-}).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(i -> System.out.println(" throttleFirst:" + i));
-```
-结果：
-
-```java
- throttleFirst:0
- throttleFirst:5
- throttleFirst:10
- throttleFirst:15
-```
-
-###### 常用作去**抖动过滤**，例如按钮的点击监听器：
+常用作去**抖动过滤**，例如按钮的点击监听器：
 
 ```java
 RxView.clickEvents(button)    // RxBinding 代码，后面的文章有解释 
@@ -1121,6 +1217,7 @@ RxView.clickEvents(button) // 以 Observable 形式来反馈点击事件
             // Click handling
         }
     });
+
 ```
 
 看起来除了形式变了没什么区别，实质上也是这样。甚至如果你看一下它的源码，你会发现它连实现都没什么惊喜：它的内部是直接用一个包裹着的 setOnClickListener() 来实现的。然而，仅仅这一个形式的改变，却恰好就是 RxBinding 的目的：扩展性。通过 RxBinding 把点击监听转换成 Observable 之后，就有了对它进行扩展的可能。扩展的方式有很多，根据需求而定。一个例子是前面提到过的 throttleFirst() ，用于去抖动，也就是消除手抖导致的快速连环点击：
@@ -1129,6 +1226,7 @@ RxView.clickEvents(button) // 以 Observable 形式来反馈点击事件
 RxView.clickEvents(button)
     .throttleFirst(500, TimeUnit.MILLISECONDS)
     .subscribe(clickAction);
+
 ```
 
 如果想对 RxBinding 有更多了解，可以去它的 [GitHub项目](https://github.com/JakeWharton/RxBinding) 下面看看。
@@ -1177,7 +1275,7 @@ observable.subscribe(new Action1() {
 
 ![](http://img.blog.csdn.net/20171231014104929?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### zip  操作符，合并多个观察对象的数据。并且允许 Func2()函数重新发送合并后的数据
+### zip  操作符，合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据
 
 ```java
 List<String> list1 = new ArrayList<>() ;
@@ -1419,7 +1517,7 @@ observable.delay( 3 , TimeUnit.SECONDS )  //延迟3秒钟
 
 ```
 
-### timer  延时操作符的使用
+### Timer  延时操作符的使用
 
 使用场景：xx秒后，执行xx     
 
@@ -1440,6 +1538,7 @@ Observable.timer( 5 , TimeUnit.SECONDS )
 ```java
 timer 返回一个 Observable , 它在延迟一段给定的时间后发射一个简单的数字0
 timer 操作符默认在computation调度器上执行，当然也可以用 Scheduler在定义执行的线程。
+
 ```
 
 #### delay vs timer
@@ -2534,14 +2633,6 @@ Observable
 	}) ;
 
 ```
-
-
-
-## 实例
-
-
-
-
 
 ## 相关推荐
 
