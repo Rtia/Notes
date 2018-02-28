@@ -59,8 +59,6 @@
 
 
 
-
-
 # 【Android 控件 RecyclerView】
 
 ## 概述
@@ -1721,12 +1719,17 @@ interface OnStartDragListener{
 ```
 
 ### 嵌套滑动机制
+Android 5.0推出了嵌套滑动机制（NestedScrolling），在之前，一旦子View处理了触摸事件，父View就没有机会再处理这次的触摸事件，而嵌套滑动机制解决了这个问题。
+- 熟悉 Android 触摸事件分发机制的童鞋肯定知道，Touch 事件在进行分发的时候，由父 View 向它的子 View 传递，一旦某个子 View 开始接收进行处理，那么接下来所有事件都将由这个 View 来进行处理，它的 ViewGroup 将不会再接收到这些事件，直到下一次手指按下。
+- 而嵌套滚动机制（NestedScrolling）就是为了弥补这一机制的不足，为了让子 View 能和父 View 同时处理一个 Touch 事件。
+  其关键在于NestedScrollingChild 和 NestedScrollingParent 两个接口，以及系统对这两个接口的实现类 NestedScrollingChildHelper 和 NestedScrollingParentHelper。
+  为了支持嵌套滑动，**子View**必须**实现NestedScrollingChild**接口，**父View**必**须实现NestedScrollingParent**接口。
+  而**RecyclerView实现了NestedScrollingChild**接口，而**CoordinatorLayout实现了NestedScrollingParent**接口。
 
-Android 5.0推出了嵌套滑动机制，在之前，一旦子View处理了触摸事件，父View就没有机会再处理这次的触摸事件，而嵌套滑动机制解决了这个问题，能够实现如下效果：
+下图是实现CoordinatorLayout嵌套RecyclerView的效果：
 [![](http://upload-images.jianshu.io/upload_images/9028834-671d2a393db0fb5f.gif?imageMogr2/auto-orient/strip)](http://upload-images.jianshu.io/upload_images/9028834-671d2a393db0fb5f.gif?imageMogr2/auto-orient/strip)
 
-为了支持嵌套滑动，**子View**必须**实现NestedScrollingChild**接口，**父View**必**须实现NestedScrollingParent**接口。
-而RecyclerView实现了NestedScrollingChild接口，而CoordinatorLayout实现了NestedScrollingParent接口，上图是实现CoordinatorLayout嵌套RecyclerView的效果。
+一开始上面一大块区域就是 CollapsingToolbarLayout ，下方的列表是 RecyclerView ，当然 RecyclerView 向上滑动时，CollapsingToolbarLayout 能够同时往上收缩，直到只剩下顶部的 Toolbar。之所以能够实现这种效果，就是完全依赖于嵌套滚动机制，如果没有这套机制，按照原有的触摸事件分发逻辑， RecyclerView 内部已经把 Touch 事件消耗掉了，完全无法引起顶部的 CollapsingToolbarLayout 产生联动收缩的效果。
 
 为了实现上图的效果，需要用到的组件有：
 
@@ -1736,10 +1739,11 @@ Android 5.0推出了嵌套滑动机制，在之前，一旦子View处理了触�
 *   ToolBar: 代替ActionBar。
 
 实现中需要注意的点有：
-
 *   我们为ToolBar的`app:layout_collapseMode`设置为pin，表示折叠之后固定在顶端，而为ImageView的`app:layout_collapseMode`设置为parallax，表示视差模式，即渐变的效果。
 *   为了让RecyclerView支持嵌套滑动，还需要为它设置`app:layout_behavior="@string/appbar_scrolling_view_behavior"`。
 *   为CollapsingToolbarLayout设置`app:layout_scrollFlags="scroll|exitUntilCollapsed"`，其中scroll表示滚动出屏幕，exitUntilCollapsed表示退出后折叠。
+*   如果在其他代码布局都不变的情况下，我们把 RecyclerView 替换成 ListView ，则无法产生上面图中的动态效果，因为 **ListView 并不支持嵌套滚动机制**，事件在 ListView 内部已经被消耗且无法传递出来。对 AppBarLayout 的使用也是同理。
+  如果你想使用类似 AppBarLayout 、 CollapsingToolbarLayout 这种需要嵌套滚动的机制才能达到效果的控件，那么 RecyclerView 将是你的不二之选，因为 ListView 在此根本无法发挥作用。同样的，**ScrollView** 也是**不支持**嵌套滚动机制，但是你可以**使用 NestedScrollView** 。
 
 具体实现参见Demo6。
 布局：
@@ -1908,6 +1912,7 @@ public class Activity6 extends AppCompatActivity {
     }
 }
 ```
+
 
 
 ## 总结
