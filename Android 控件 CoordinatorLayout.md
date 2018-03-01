@@ -195,6 +195,9 @@ AppBar 是 Design 的一个概念，其实我们也可以把它看做一种 5.0 
 
 我们看看上面的到底怎么实现的：
 
+- AppBarLayout子控件设置app:**layout_scrollFlags**
+- RecyclerView设置：app:**layout_behavior**="@string/**appbar_scrolling_view_behavior**"
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout

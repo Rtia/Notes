@@ -171,6 +171,13 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.VH>{
 
     //③ 在Adapter中实现3个方法
     @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        //LayoutInflater.from指定写法
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_1, parent, false);
+        return new VH(v);
+    }
+  
+    @Override
     public void onBindViewHolder(VH holder, int position) {
         holder.title.setText(mDatas.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -184,13 +191,6 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.VH>{
     @Override
     public int getItemCount() {
         return mDatas.size();
-    }
-
-    @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        //LayoutInflater.from指定写法
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_1, parent, false);
-        return new VH(v);
     }
 }
 ```
@@ -223,18 +223,53 @@ RecyclerView的四大组成是：
 *   Item Animator：添加、删除Item动画。
 
 ### Layout Manager布局管理器
+
 在最开始就提到，RecyclerView 能够支持各种各样的布局效果，这是 ListView 所不具有的功能，那么这个功能如何实现的呢？其核心关键在于 [RecyclerView.LayoutManager](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.LayoutManager.html) 类中。从前面的基础使用可以看到，RecyclerView 在使用过程中要比 ListView 多一个 setLayoutManager 步骤，这个 LayoutManager 就是用于控制我们 RecyclerView 最终的展示效果的。
 
 LayoutManager负责RecyclerView的布局，其中包含了Item View的获取与回收。
 
 RecyclerView提供了**三种布局管理器**：
-- **LinerLayoutManager** 以**垂直**或者**水平列表**方式展示Item
+- **LinearLayoutManager **以垂直**或者**水平列表**方式展示Item
 - **GridLayoutManager** 以**网格**方式展示Item
 - **StaggeredGridLayoutManager** 以**瀑布流**方式展示Item
+
+
+
+#### ① LinearLayoutManager线性
+
+- LinearLayoutManager(Context context)
+  - 该构造函数**默认**是**竖直**方向
+- LinearLayoutManager(Context context, int orientation, boolean reverseLayout)
+  - orientation方向，水平（OrientationHelper.HORIZONTAL）或者竖直（OrientationHelper.VERTICAL）
+  - reverseLayout是否逆向，true：布局逆向展示，false：布局正向显示
+
+
+
+#### ② GridLayoutManager
+
+- GridLayoutManager(Context context, int spanCount)
+  - spanCount，每列或者每行的item个数，设置为1，就是列表样式
+  - 该构造函数**默认**是**竖直**方向的网格样式
+- GridLayoutManager(Context context, int spanCount, int orientation,boolean reverseLayout)
+  - spanCount每列或者每行的item个数，设置为1，就是列表样式
+  - orientation方向，水平（OrientationHelper.HORIZONTAL）或者竖直（OrientationHelper.VERTICAL）
+  - reverseLayout是否逆向，true：布局逆向展示，false：布局正向显示
+
+
+
+#### ③ StaggeredGridLayoutManager瀑布流
+
+StaggeredGridLayoutManager(int spanCount, int orientation)
+
+- spanCount每列或者每行的item个数
+- orientation方向，水平（OrientationHelper.HORIZONTAL）或者竖直（OrientationHelper.VERTICAL）
+
+
 
 如果你想用 RecyclerView 来实现自己**自定义效果**，则应该去**继承实现自己的 LayoutManager**，并重写相应的方法，而不应该想着去改写 RecyclerView。
 
 #### LayoutManager 常见 API
+
 关于 LayoutManager 的使用有下面一些常见的 API（有些在 LayoutManager 实现的子类中）
 
 ```java
@@ -342,7 +377,7 @@ static class VH extends RecyclerView.ViewHolder{
 }
 ```
 
-其中的关键点在于通过`SparseArray<View>`存储item view的控件，`getView(int id)`的功能就是通过id获得对应的View（首先在mViews中查询是否存在，如果没有，那么`findViewById()`并放入mViews中，避免下次再执行`findViewById()`）。
+其中的**关键点在于通过`SparseArray<View> mViews`存储item view的控件**，`getView(int id)`的功能就是通过id获得对应的View（首先在mViews中查询是否存在，如果没有，那么`findViewById()`并放入mViews中，避免下次再执行`findViewById()`）。
 
 **QuickAdapter的实现**如下：
 ``` java
@@ -352,54 +387,53 @@ public abstract class QuickAdapter<T> extends RecyclerView.Adapter<QuickAdapter.
         this.mDatas = datas;
     }
 
-    public abstract int getLayoutId(int viewType);
-
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         return VH.get(parent,getLayoutId(viewType));
     }
-
+  //根据viewType返回布局ID
+    public abstract int getLayoutId(int viewType);
+  
     @Override
     public void onBindViewHolder(VH holder, int position) {
         convert(holder, mDatas.get(position), position);
     }
-
+  //具体的bind操作
+    public abstract void convert(VH holder, T data, int position);
+  
     @Override
     public int getItemCount() {
         return mDatas.size();
     }
 
-    public abstract void convert(VH holder, T data, int position);
-    
-	static class VH extends RecyclerView.ViewHolder{
-	    private SparseArray<View> mViews;
-	    private View mConvertView;
-	
-	    private VH(View v){
-	        super(v);
-	        mConvertView = v;
-	        mViews = new SparseArray<>();
-	    }
-	
-	    public static VH get(ViewGroup parent, int layoutId){
-	        View convertView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
-	        return new VH(convertView);
-	    }
-	
-	    public <T extends View> T getView(int id){
-	        View v = mViews.get(id);
-	        if(v == null){
-	            v = mConvertView.findViewById(id);
-	            mViews.put(id, v);
-	        }
-	        return (T)v;
-	    }
-	
-	    public void setText(int id, String value){
-	        TextView view = getView(id);
-	        view.setText(value);
-	    }
-	}
+    static class VH extends RecyclerView.ViewHolder{
+        private SparseArray<View> mViews;
+        private View mConvertView;
+        private VH(View v){
+            super(v);
+            mConvertView = v;
+            mViews = new SparseArray<>();
+        }
+
+        public static VH get(ViewGroup parent, int layoutId){
+            View convertView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+            return new VH(convertView);
+        }
+
+        public <T extends View> T getView(int id){
+            View v = mViews.get(id);
+            if(v == null){
+                v = mConvertView.findViewById(id);
+                mViews.put(id, v);
+            }
+            return (T)v;
+        }
+
+        public void setText(int id, String value){
+            TextView view = getView(id);
+            view.setText(value);
+        }
+    }
 }
 ```
 
@@ -493,13 +527,15 @@ Google在sample中给了一个参考的实现类：[DividerItemDecoration](https
 ##### ① 获取listDivider
 首先看构造函数，构造函数中获得系统属性`android:listDivider`，该属性是一个Drawable对象。
 ``` java
-private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-private Drawable mDivider;
-public DividerItemDecoration(Context context, int orientation) {
-    final TypedArray a = context.obtainStyledAttributes(ATTRS);
-    mDivider = a.getDrawable(0);
-    a.recycle();
-    setOrientation(orientation);
+public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
+    private Drawable mDivider;
+    public DividerItemDecoration(Context context, int orientation) {
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        mDivider = a.getDrawable(0);
+        a.recycle();
+        setOrientation(orientation);
+    }
 }
 ```
 
@@ -534,21 +570,31 @@ public void measureChild(View child, int widthUsed, int heightUsed){
 这里我们只考虑`mOrientation == VERTICAL_LIST`的情况，DividerItemDecoration的`onDraw()`实际上调用了`drawVertical()`：
 
 ``` java
-public void drawVertical(Canvas c, RecyclerView parent) {
-    final int left = parent.getPaddingLeft();
-    final int right = parent.getWidth() - parent.getPaddingRight();
-    final int childCount = parent.getChildCount();
-    // 画每个item的分割线
-    for (int i = 0; i < childCount; i++) {
-        final View child = parent.getChildAt(i);
-        final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                .getLayoutParams();
-        final int top = child.getBottom() + params.bottomMargin + Math.round(ViewCompat.getTranslationY(child));
-        final int bottom = top + mDivider.getIntrinsicHeight();
-        mDivider.setBounds(left, top, right, bottom);/*规定好左上角和右下角*/
-        mDivider.draw(c);
+    @Override
+    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        if (mOrientation == VERTICAL_LIST) {
+            drawVertical(c, parent);
+        } else {
+            drawHorizontal(c, parent);
+        }
     }
-}
+    public void drawVertical(Canvas c, RecyclerView parent) {
+        final int left = parent.getPaddingLeft();
+        final int right = parent.getWidth() - parent.getPaddingRight();
+        final int childCount = parent.getChildCount();
+        // 画每个item的分割线
+        for (int i = 0; i < childCount; i++) {
+            final View child = parent.getChildAt(i);
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                    .getLayoutParams();
+            final int top = child.getBottom() + params.bottomMargin +
+                    Math.round(ViewCompat.getTranslationY(child));
+            //mDivider.getIntrinsicHeight() 单位dp
+            final int bottom = top + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);/*规定好左上角和右下角*/
+            mDivider.draw(c);
+        }
+    }
 ```
 
 那么`onDraw()`是怎么被调用的呢？还有ItemDecoration还有一个方法`onDrawOver()`，该方法也可以被重写，那么`onDraw()`和`onDrawOver()`之间有什么关系呢？
@@ -579,6 +625,10 @@ class RecyclerView extends ViewGroup{
 根据[View的绘制流程](http://a.codekk.com/detail/Android/lightSky/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B)，首先调用RecyclerView重写的`draw()`方法，随后`super.draw()`即调用View的`draw()`，该方法会先调用`onDraw()`（这个方法在RecyclerView重写了），再调用`dispatchDraw()`绘制children。因此：ItemDecoration的`onDraw()`在绘制Item之前调用，ItemDecoration的`onDrawOver()`在绘制Item之后调用。
 
 当然，如果只需要实现Item之间相隔一定距离，那么只需要为Item的布局设置margin即可，没必要自己实现ItemDecoration这么麻烦。
+
+
+
+
 
 
 
@@ -812,133 +862,6 @@ public class DefaultItemAnimator extends BaseItemAnimator {
 
 
 
-
-
-
-
-## 点击事件
-
-RecyclerView并没有像ListView一样暴露出Item点击事件或者长按事件处理的api，也就是说使用RecyclerView时候，需要我们自己来实现Item的点击和长按等事件的处理。
-实现方法有很多：
-
-- 可以**监听RecyclerView的Touch事件**然后判断手势做相应的处理，
-- 也可以通过**在绑定ViewHolder的时候设置监听**，然后通过Apater回调出去
-
-我们选择第二种方法，更加直观和简单。
-看一下Adapter的完整代码。
-
-```java
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
-    // 展示数据
-    private ArrayList<String> mData;
-    // 事件回调监听
-    private MyAdapter.OnItemClickListener onItemClickListener;
-    public MyAdapter(ArrayList<String> data) {
-        this.mData = data;
-    }
-    public void updateData(ArrayList<String> data) {
-        this.mData = data;
-        notifyDataSetChanged();
-    }
-    // 添加新的Item
-    public void addNewItem() {
-        if(mData == null) {
-            mData = new ArrayList<>();
-        }
-        mData.add(0, "new Item");
-        notifyItemInserted(0);
-    }
-    // 删除Item
-    public void deleteItem() {
-        if(mData == null || mData.isEmpty()) {
-            return;
-        }
-        mData.remove(0);
-        notifyItemRemoved(0);
-    }
-
-    // ① 定义点击回调接口
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
-    }
-    
-    // ② 定义一个设置点击监听器的方法
-    public void setOnItemClickListener(MyAdapter.OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // 实例化展示的view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rv_item, parent, false);
-        // 实例化viewholder
-        ViewHolder viewHolder = new ViewHolder(v);
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        // 绑定数据
-        holder.mTv.setText(mData.get(position));
-        //③ 对RecyclerView的每一个itemView设置点击事件
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if(onItemClickListener != null) {
-                    int pos = holder.getLayoutPosition();
-                    onItemClickListener.onItemClick(holder.itemView, pos);
-                }
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if(onItemClickListener != null) {
-                    int pos = holder.getLayoutPosition();
-                    onItemClickListener.onItemLongClick(holder.itemView, pos);
-                }
-                //表示此事件已经消费，不会触发单击事件
-                return true;
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData == null ? 0 : mData.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTv;
-        public ViewHolder(View itemView) {
-            super(itemView);
-            mTv = (TextView) itemView.findViewById(R.id.item_tv);
-        }
-    }
-}
-```
-
-设置Adapter的事件监听。
-
-```java
-mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(MDRvActivity.this,"click " + position + " item", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onItemLongClick(View view, int position) {
-        Toast.makeText(MDRvActivity.this,"long click " + position + " item", Toast.LENGTH_SHORT).show();
-    }
-});
-```
-
-最后的实现效果。
-
-[![](http://upload-images.jianshu.io/upload_images/9028834-7bc274b8a4be673e.gif?imageMogr2/auto-orient/strip)](http://upload-images.jianshu.io/upload_images/9028834-7bc274b8a4be673e.gif?imageMogr2/auto-orient/strip)
 
 
 ## 网格样式
@@ -1322,7 +1245,133 @@ view_rv_staggered_item.xml修改背景色和外层间距背景色。
 差不多完美的解决了间隔线的问题，有细心的同学可能发现，在RecyclerView滑动的时候上面一直有一条灰色的间隔线，这个可以通过取消xml布局文件中RecyclerView的paddingTop属性去掉顶部灰色的间隔线。
 
 
+
+
 ## 拓展RecyclerView
+
+###  添加点击事件
+
+RecyclerView并没有像ListView一样暴露出Item点击事件或者长按事件处理的api，也就是说使用RecyclerView时候，需要我们自己来实现Item的点击和长按等事件的处理。
+实现方法有很多：
+
+- 可以**监听RecyclerView的Touch事件**然后判断手势做相应的处理，
+- 也可以通过**在绑定ViewHolder的时候设置监听**，然后通过Apater回调出去
+
+我们选择第二种方法，更加直观和简单。
+看一下Adapter的完整代码。
+
+```java
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
+    // 展示数据
+    private ArrayList<String> mData;
+    public MyAdapter(ArrayList<String> data) {
+        this.mData = data;
+    }
+    public void updateData(ArrayList<String> data) {
+        this.mData = data;
+        notifyDataSetChanged();
+    }
+    // 添加新的Item
+    public void addNewItem() {
+        if(mData == null) {
+            mData = new ArrayList<>();
+        }
+        mData.add(0, "new Item");
+        notifyItemInserted(0);
+    }
+    // 删除Item
+    public void deleteItem() {
+        if(mData == null || mData.isEmpty()) {
+            return;
+        }
+        mData.remove(0);
+        notifyItemRemoved(0);
+    }
+
+    // 事件回调监听
+    private MyAdapter.OnItemClickListener onItemClickListener;
+    // ① 定义点击回调接口
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
+    }
+    
+    // ② 定义一个设置点击监听器的方法
+    public void setOnItemClickListener(MyAdapter.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // 实例化展示的view
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rv_item, parent, false);
+        // 实例化viewholder
+        ViewHolder viewHolder = new ViewHolder(v);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        // 绑定数据
+        holder.mTv.setText(mData.get(position));
+        //③ 对RecyclerView的每一个itemView设置点击事件
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if(onItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, pos);
+                }
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(onItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemLongClick(holder.itemView, pos);
+                }
+                //表示此事件已经消费，不会触发单击事件
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData == null ? 0 : mData.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView mTv;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mTv = (TextView) itemView.findViewById(R.id.item_tv);
+        }
+    }
+}
+```
+
+设置Adapter的事件监听。
+
+```java
+mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(MDRvActivity.this,"click " + position + " item", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Toast.makeText(MDRvActivity.this,"long click " + position + " item", Toast.LENGTH_SHORT).show();
+    }
+});
+```
+
+最后的实现效果。
+
+[![](http://upload-images.jianshu.io/upload_images/9028834-7bc274b8a4be673e.gif?imageMogr2/auto-orient/strip)](http://upload-images.jianshu.io/upload_images/9028834-7bc274b8a4be673e.gif?imageMogr2/auto-orient/strip)
 
 
 
@@ -1334,10 +1383,10 @@ RecyclerView默认没有提供类似`addHeaderView()`和`addFooterView()`的API�
 
 这里引入**装饰器（Decorator）设计模式**，该设计模式通过组合的方式，在不破话原有类代码的情况下，对原有类的功能进行扩展。
 
-具体实现思路其实很简单，创建一个继承`RecyclerView.Adapter<RecyclerView.ViewHolder>`的类，并重写常见的方法，然后通过引入ITEM TYPE的方式实现：
+具体实现思路其实很简单，创建一个继承`RecyclerView.Adapter<RecyclerView.ViewHolder>`的类，并重写常见的方法，然后**通过引入ITEM TYPE的方式实现**：
 ``` java
 public class NormalAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
+//不同布局类型
     enum ITEM_TYPE{
         HEADER,
         FOOTER,
@@ -1413,37 +1462,41 @@ mRecyclerView.setAdapter(newAdapter);
 
 是不是看起来特别优雅。
 
-
 ### 添加setEmptyView
 
 ListView提供了`setEmptyView()`设置Adapter数据为空时的View视图。RecyclerView虽然没提供直接的API，但是也可以很简单地实现。
 
 *   创建一个继承RecyclerView的类，记为EmptyRecyclerView。
-*   通过`getRootView().addView(emptyView)`将空数据时显示的View添加到当前View的层次结构中。
-*   通过AdapterDataObserver监听RecyclerView的数据变化，如果adapter为空，那么隐藏RecyclerView，显示EmptyView。
+*   通过**`getParent().addView(emptyView)`**将空数据时显示的emptyView添加到当前View父控件的层次结构中。
+*   通过**`AdapterDataObserver`监听RecyclerView的数据变化**，如果adapter为空，那么隐藏RecyclerView，显示EmptyView。
 
 具体实现如下：
 
 ``` java
-public class EmptyRecyclerView extends RecyclerView{
+public class EmptyRecyclerView extends RecyclerView {
     private View mEmptyView;
+
     private AdapterDataObserver mObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
             Adapter adapter = getAdapter();
-            if(adapter.getItemCount() == 0){
+            if (adapter.getItemCount() == 0) {
                 mEmptyView.setVisibility(VISIBLE);
                 EmptyRecyclerView.this.setVisibility(GONE);
-            } else{
+            } else {
                 mEmptyView.setVisibility(GONE);
                 EmptyRecyclerView.this.setVisibility(VISIBLE);
             }
         }
-
+        @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {onChanged();}
+        @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {onChanged();}
+        @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {onChanged();}
+        @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {onChanged();}
+        @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {onChanged();}
     };
 
@@ -1451,53 +1504,22 @@ public class EmptyRecyclerView extends RecyclerView{
         super(context, attrs);
     }
 
-    public void setEmptyView(View view){
-        this.mEmptyView = view;
-        ((ViewGroup)this.getRootView()).addView(mEmptyView); //加入主界面布局
+    public void setEmptyView(View view) {
+        mEmptyView = view;
+        //将EmptyView加入父控件布局中
+        ((ViewGroup) this.getParent()).addView(mEmptyView);
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter){
+    public void setAdapter(RecyclerView.Adapter adapter) {
         super.setAdapter(adapter);
+        //监听数据变化
         adapter.registerAdapterDataObserver(mObserver);
         mObserver.onChanged();
     }
-}   
+}
 ```
 
-布局
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <me.xiazdong.recyclerviewdemo.demo5.EmptyRecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/text_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="空数据啊"
-            android:visibility="gone" />
-    </FrameLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#333333" />
-</LinearLayout>
-```
 
 Activity中使用
 ``` java
@@ -1509,8 +1531,8 @@ Activity中使用
         mRv.setLayoutManager(new LinearLayoutManager(this));
         mData = new ArrayList<>();
         mAdapter = new NormalAdapter(mData);
-        //View view = LayoutInflater.from(this).inflate(R.layout.empty, null);
-        View view = findViewById(R.id.text_empty);
+        View view = LayoutInflater.from(this).inflate(R.layout.empty, null);
+        //View view = findViewById(R.id.text_empty);
         mRv.setEmptyView(view);
         mRv.setAdapter(mAdapter);
     }
@@ -1586,6 +1608,9 @@ public class SimpleItemTouchCallback extends ItemTouchHelper.Callback {
 ```
 #### ② 设置ItemTouchHelper给RecyclerView
 然后通过以下代码为RecyclerView设置该滑动、拖拽功能：
+
+**`ItemTouchHelper.attachToRecyclerView`**(recyclerview);
+
 ``` java
 ItemTouchHelper helper = new ItemTouchHelper(new SimpleItemTouchCallback(adapter, data));
 helper.attachToRecyclerView(recyclerview);
@@ -1797,7 +1822,25 @@ Android 5.0推出了嵌套滑动机制（NestedScrolling），在之前，一旦
         />
 </android.support.design.widget.CoordinatorLayout>
 ```
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        />
+</RelativeLayout>
+```
+
 适配器：
+
 ``` java
 public abstract class QuickAdapter<T> extends RecyclerView.Adapter<QuickAdapter.VH>{
 
@@ -2238,6 +2281,8 @@ RecyclerView局部刷新的实现原理也是基于RecyclerView的回收机制�
 *   [RecyclerView优秀文章集](https://github.com/CymChad/CymChad.github.io)
 
 
+
+
 **引用：**
 ★★★★[RecyclerView 必知必会](http://blog.csdn.net/tencent_bugly/article/details/54287626#t7)
 ★★★★[Android ListView 与 RecyclerView 对比浅析–缓存机制](http://blog.csdn.net/tencent_bugly/article/details/52981210)
@@ -2253,6 +2298,6 @@ RecyclerView局部刷新的实现原理也是基于RecyclerView的回收机制�
  *   Demo2: ListView实现局部刷新。
  *   Demo3: RecyclerView实现拖拽、侧滑删除。
  *   Demo4: RecyclerView闪屏问题。
- *   Demo5: RecyclerView实现`setEmptyView()`。
+ *   Demo5: RecyclerView实现setEmptyView()。
  *   Demo6: RecyclerView实现万能适配器，瀑布流布局，嵌套滑动机制。
 
