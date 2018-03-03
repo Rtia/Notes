@@ -1549,8 +1549,8 @@ Android提供了ItemTouchHelper类，使得RecyclerView能够轻易地实现滑�
 *   **`onMove()`**: 拖拽时回调。
 *   **`onSwiped()`**: 滑动时回调。
 *   **`onSelectedChanged()`**: 状态变化时回调，一共有三个状态，分别是ACTION_STATE_**IDLE**(空闲状态)，ACTION_STATE_**SWIPE**(滑动状态)，ACTION_STATE_**DRAG**(拖拽状态)。此方法中可以做一些状态变化时的处理，比如拖拽的时候修改背景色。
-*   **`clearView()**`: 用户**交互结束**时回调。此方法可以做一些状态的清空，比如拖拽结束后还原背景色。
-*   **`isLongPressDragEnabled()`**: 是否支持长按拖拽，默认为true。如果不想支持长按拖拽，则重写并返回false。
+*   **`clearView()`**: 用户**交互结束**时回调。此方法可以做一些状态的清空，比如拖拽结束后还原背景色。
+*   **`isLongPressDragEnabled()`**: 是否支持长按拖拽，**默认为true**。如果不想支持长按拖拽，则重写并返回false。
 
 具体实现如下：
 ``` java
@@ -1617,7 +1617,10 @@ helper.attachToRecyclerView(recyclerview);
 ```
 
 #### 触摸拖拽
-前面拖拽的触发方式只有长按，如果想支持触摸Item中的某个View实现拖拽，则核心方法为`helper.startDrag(holder)`。首先定义接口：
+前面拖拽的触发方式只有长按，如果想支持触摸Item中的某个View实现拖拽，则核心方法为**`helper.startDrag(holder)`**。
+
+首先定义接口：
+
 ``` java
 interface OnStartDragListener{
     void startDrag(RecyclerView.ViewHolder holder);
@@ -1626,10 +1629,11 @@ interface OnStartDragListener{
 
 然后让Activity实现该接口：
 
-```
+```java
 public MainActivity extends Activity implements OnStartDragListener{
     ...
     public void startDrag(RecyclerView.ViewHolder holder) {
+      //核心方法
         mHelper.startDrag(holder);
     }
 }
@@ -1637,7 +1641,7 @@ public MainActivity extends Activity implements OnStartDragListener{
 
 如果要对ViewHolder的text对象支持触摸拖拽，则在Adapter中的`onBindViewHolder()`中添加：
 
-```
+```java
 holder.text.setOnTouchListener(new View.OnTouchListener() {
     @Override
     public boolean onTouch(View v, MotionEvent event) {

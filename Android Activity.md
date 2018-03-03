@@ -116,6 +116,8 @@
 
 
 
+
+
 # 【Android Activity】
 
 <span id="什么是 Activity?"/>
@@ -1315,6 +1317,16 @@ d)     也就是说把 Bitmap 放到 Intent 里会导致巨大的内存损耗，
  从这个布局文件中可以看到，我在id为themeColor、themeText及theme_image的控件上，分别使用了?attr/colorValue、?attr/stringValue与?attr/referenceValue来引用主题中的颜色值、字符串以及图片。
 
 #### 1.4设置主题
+关键代码：
+**`context.setTheme`** (int styleResid)
+
+>**setTheme**
+>Added in API level 1
+>void setTheme (int resid)
+>Set the base theme for this context. Note that this should be called before any views are instantiated in the Context (for example before calling setContentView(View) or inflate(int, ViewGroup)).
+>Parameters
+>resid
+>int: The style resource describing the theme.
 
  布局文件与主题都写好了，接下来我们就要在Activity的onCreate方法里使用了
 
@@ -1335,6 +1347,7 @@ public class DemoStyleThemeActivity extends Activity {
 更严重的是，要是默认主题里没那些属性，解析布局文件时候是会挂的啊！这点在配置多个不同style时要主题，属性可以多，但一定不能少。 
 
 上面几步只是在 Activity 使用自己的主题，实现动态切换主题的思路是把 setTheme 里面的主题作为一个变量，当需要切换主题时，改变这个变量的值，然后重新创建当前 Activity。 
+
 #### 1.5切换主题 
 ① 在自定义 Application 中记录当前主题
 ```java
