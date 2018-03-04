@@ -116,8 +116,18 @@
       - [1.Retrofit的创建过程**](#1retrofit%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B)
       - [2.Call的创建过程**](#2call%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B)
       - [3.Call的enqueue方法**](#3call%E7%9A%84enqueue%E6%96%B9%E6%B3%95)
+- [网络请求库对比](#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%BA%93%E5%AF%B9%E6%AF%94)
+  - [前言](#%E5%89%8D%E8%A8%80)
+    - [为什么要用网络请求开源库？](#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%BC%80%E6%BA%90%E5%BA%93)
+    - [Android实现网络请求的主流方法（SDK自带）](#android%E5%AE%9E%E7%8E%B0%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E7%9A%84%E4%B8%BB%E6%B5%81%E6%96%B9%E6%B3%95sdk%E8%87%AA%E5%B8%A6)
+      - [HttpClient vs HttpURLConnection](#httpclient-vs-httpurlconnection)
+    - [网络请求库 与 Android网络请求方法的关系](#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%BA%93-%E4%B8%8E-android%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95%E7%9A%84%E5%85%B3%E7%B3%BB)
+  - [主流的网络请求库 简介](#%E4%B8%BB%E6%B5%81%E7%9A%84%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%BA%93-%E7%AE%80%E4%BB%8B)
+  - [网络请求库- 对比](#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%BA%93--%E5%AF%B9%E6%AF%94)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
 
 # 【Android 网络编程】
 
@@ -402,7 +412,7 @@ w ( HL (1^ P nK  E ѷ93'3gNLH  7P  $c \  T 4a6   L:+ 1dY%$g   h H   +
 
 通常我们进行HTTP连接网络的时候我们会进行TCP的三次握手，然后传输数据，然后再释放连接。
 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-b426973afcca1b4c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-b426973afcca1b4c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 TCP三次握手的过程为：
 
@@ -426,12 +436,12 @@ TCP三次握手的过程为：
 *   第四次分手：主机1收到主机2发送的FIN报文段，向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文段以后，就关闭连接；此时，主机1等待2MSL后依然没有收到回复，则证明Server端已正常关闭，那好，主机1也可以关闭连接了。
 
 来看下面的图加强下理解： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-3b55bf8238e2a7f6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-3b55bf8238e2a7f6?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 #### **keepalive connections**
 
 当然大量的连接每次连接关闭都要三次握手四次分手的很显然会造成性能低下，因此http有一种叫做keepalive connections的机制，它可以在传输数据后仍然保持连接，当客户端需要再次获取数据时，直接使用刚刚空闲下来的连接而不需要再次握手。 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-c30dc67dfb1dd1fd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-c30dc67dfb1dd1fd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 # HttpClient与HttpURLConnection
 
@@ -1632,7 +1642,7 @@ private void postAsynHttp() {
 ```
 
 第一次请求会请求网络得到数据，第二次以及后面的请求则会从缓存中取出数据： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-92de416cbec590a5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-92de416cbec590a5?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 当然也有种情况是有的请求每次都需要最新的数据，则在创建Request，来设置**`cacheControl`**为**`CacheControl.FORCE_NETWORK`**，用来表示请求会**一直请求网络**得到数据：
 
@@ -1645,7 +1655,7 @@ private void postAsynHttp() {
 
 运行程序结果为：
 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-bc832f1f0c437ed0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-bc832f1f0c437ed0?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ### 设置超时时间
 
@@ -1717,10 +1727,10 @@ private void postAsynHttp() {
 ```
 
 100毫秒后调用call.cancel()，为了能让请求耗时，我们设置每次请求都要请求网络，运行程序并且不断的快速点击发送请求按钮： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-cfe9ac6a7682649d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-cfe9ac6a7682649d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 很明显每次cancel()都失败了，仍旧成功的访问了网络，在cancel()时已经有读写操作了所以会报IOException。每隔100毫秒来调用call.cancel()显然时间间隔太长，我们设置为1毫秒并不断的快速的点击发送请求按钮： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-094f25e1a8fe536c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-094f25e1a8fe536c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 没有请求网络的log，几乎每次都取消成功了。
 
@@ -1969,7 +1979,7 @@ private void postAsynFile() {
 当然如果想要改为同步的上传文件只要调用 mOkHttpClient.newCall(request).execute()就可以了。 
 在wangshu.txt文件中有一行字“Android网络编程（六）OkHttp3用法全解析”我们运行程序点击发送文件按钮，最终请求网络返回的结果就是我们txt文件中的内容 ：
 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-b7e436b7a11142cd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-b7e436b7a11142cd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 当然不要忘了添加如下权限：
 
@@ -2221,7 +2231,7 @@ public Response proceed(Request request) throws IOException {
 }
 ```
 proceed方法每次从拦截器列表中取出拦截器，当存在多个拦截器时都会在第七行阻塞，并等待下一个拦截器的调用返回。下面分别以 拦截器链中有1个、2个拦截器的场景加以模拟： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-794e8f89f65769a8?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-794e8f89f65769a8?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 拦截器主要用来观察，修改以及可能短路的请求输出和响应的回来。通常情况下拦截器用来添加，移除或者转换请求或者响应的头部信息。比如将域名替换为ip地址，将请求头中添加host属性，也可以添加我们应用中的一些公共参数，比如设备id、版本号等等。 不了解拦截器的可以查看[Okhttp-wiki 之 Interceptors 拦截器](http://www.jianshu.com/p/2710ed1e6b48)这篇文章。 
 回到代码上来，我们看最后一行 return getResponse(request, forWebSocket)，如果没有更多的拦截器的话，就会执行网络请求，来看看getResponse方法做了些什么（RealCall.java）：
 ```
@@ -2470,7 +2480,7 @@ public void readResponse() throws IOException {
 ```
 最后一行可以看到就是重新创建了HttpEngine并返回，用来完成重连。 
 到这里OkHttp请求网络的流程基本上讲完了，下面是关于OKHttp的请求流程图： 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-ea3a94bf15c99250?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-ea3a94bf15c99250?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 参考资料： 
 [http://www.jianshu.com/p/aad5aacd79bf](http://www.jianshu.com/p/aad5aacd79bf) 
 [http://www.jianshu.com/p/64e256c1dbbf](http://www.jianshu.com/p/64e256c1dbbf) 
@@ -2483,7 +2493,7 @@ public void readResponse() throws IOException {
 #### **keepalive connections**
 
 当然大量的连接每次连接关闭都要三次握手四次分手的很显然会造成性能低下，因此http有一种叫做keepalive connections的机制，它可以在传输数据后仍然保持连接，当客户端需要再次获取数据时，直接使用刚刚空闲下来的连接而不需要再次握手。 
-![这里写图片描述](http://upload-images.jianshu.io/upload_images/9028834-c30dc67dfb1dd1fd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](http://upload-images.jianshu.io/upload_images/9028834-c30dc67dfb1dd1fd?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 Okhttp支持5个并发KeepAlive，默认链路生命为5分钟(链路空闲后，保持存活的时间)。
 
@@ -3623,7 +3633,67 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 Call的enqueue方法主要做的就是用OKHttp来请求网络并将返回的Response进行数据转换并回调给UI线程。 
 至此，Retrofit的源码就讲到这里。
 
+# 网络请求库对比
+## 前言
+### 为什么要用网络请求开源库？
 
+网络请求开源库是一个将 **网络请求的相关功能**封装好的类库
+
+*   没有网络请求框架之前
+    App想与服务器进行网络请求交互是一件很痛苦的事：因为Android的主线程不能进行网络请求，需另开1个线程请求、考虑到线程池,缓存等一堆问题
+
+*   使用网络请求库后
+    实现网络请求的需求同时不需要考虑:
+    *   **异步**请求
+    *   **线程池**
+    *   **缓存**
+    *   blabla
+      同时还：
+    *   降低开发难度
+    *   缩短开发周期
+    *   使用方便
+
+
+### Android实现网络请求的主流方法（SDK自带）
+#### HttpClient vs HttpURLConnection
+[![](http://img.blog.csdn.net/20180304222819741?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)](http://img.blog.csdn.net/20180304222819741?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+### 网络请求库 与 Android网络请求方法的关系
+
+*   网络请求库的本质 = 封装了 **网络请求 + 异步 + 数据处理**功能的库
+
+*   其中，网络请求功能则是采用`Android`网络请求的原生方法（`HttpClient`或`HttpURLConnection`）
+
+*   具体如下图
+
+[![](http://img.blog.csdn.net/20180304222825468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)](http://img.blog.csdn.net/20180304222825468?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+
+
+* * *
+
+## 主流的网络请求库 简介
+
+如今`Android`中主流的网络请求框架有：
+
+*   `Android-Async-Http`
+*   `Volley`
+*   `OkHttp`
+*   `Retrofit`
+
+下面是简单介绍：
+
+[![](http://img.blog.csdn.net/20180304222830678?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)](http://img.blog.csdn.net/20180304222830678?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+Github地址
+
+*   [Android-Async-Http](https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Floopj%2Fandroid-async-http)
+*   [Volley](https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Fstormzhang%2FAndroidVolley)
+*   [OkHttp](https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Fsquare%2Fokhttp)
+*   [Retrofit](https://link.jianshu.com?t=https%3A%2F%2Fgithub.com%2Fsquare%2Fretrofit)
+
+## 网络请求库- 对比
+[![](http://img.blog.csdn.net/20180304222804157?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)](http://img.blog.csdn.net/20180304222804157?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
 **引用：**
 ★★★[Android网络编程（一）HTTP协议原理](http://blog.csdn.net/itachi85/article/details/50982995) 
@@ -3637,6 +3707,7 @@ Call的enqueue方法主要做的就是用OKHttp来请求网络并将返回的Res
 ★★★[Android网络编程（九）Retrofit2前篇-基本使用](http://blog.csdn.net/itachi85/article/details/52469902)
 ★★★[Android网络编程（十）Retrofit2后篇-注解](http://blog.csdn.net/itachi85/article/details/53007262)
 ★★★[Android网络编程（十一）源码解析Retrofit](http://blog.csdn.net/itachi85/article/details/53443647)
+★★★[Android：主流网络请求开源库的对比（Android-Async-Http、Volley、OkHttp、Retrofit）](https://www.jianshu.com/p/050c6db5af5a)
 
 
 
