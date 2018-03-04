@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [简洁优雅地实现夜间模式](#%E7%AE%80%E6%B4%81%E4%BC%98%E9%9B%85%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F)
+    - [前言](#%E5%89%8D%E8%A8%80)
+    - [实现](#%E5%AE%9E%E7%8E%B0)
+    - [添加依赖](#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96)
+    - [准备资源](#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90)
+    - [应用](#%E5%BA%94%E7%94%A8)
+      - [静态应用](#%E9%9D%99%E6%80%81%E5%BA%94%E7%94%A8)
+      - [动态应用](#%E5%8A%A8%E6%80%81%E5%BA%94%E7%94%A8)
+      - [Q&A](#qa)
+    - [代码](#%E4%BB%A3%E7%A0%81)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # [简洁优雅地实现夜间模式](https://segmentfault.com/a/1190000007979581)
 
 关键代码

@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [**【AndroidStudio 常见问题】**](#androidstudio-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+- [**软件问题：**](#%E8%BD%AF%E4%BB%B6%E9%97%AE%E9%A2%98)
+  - [高速下载网址](#%E9%AB%98%E9%80%9F%E4%B8%8B%E8%BD%BD%E7%BD%91%E5%9D%80)
+  - [配置环境变量](#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+  - [缓存文件夹配置](#%E7%BC%93%E5%AD%98%E6%96%87%E4%BB%B6%E5%A4%B9%E9%85%8D%E7%BD%AE)
+  - [SDK Manager.exe 无法打开，一闪而过](#sdk-managerexe-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E4%B8%80%E9%97%AA%E8%80%8C%E8%BF%87)
+  - [Gradle手动下载](#gradle%E6%89%8B%E5%8A%A8%E4%B8%8B%E8%BD%BD)
+  - [No JVM installation found-->需要安装jdk7](#no-jvm-installation-found--%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85jdk7)
+  - [安装完启动时提示下载sdk](#%E5%AE%89%E8%A3%85%E5%AE%8C%E5%90%AF%E5%8A%A8%E6%97%B6%E6%8F%90%E7%A4%BA%E4%B8%8B%E8%BD%BDsdk)
+  - [查看task栈情况](#%E6%9F%A5%E7%9C%8Btask%E6%A0%88%E6%83%85%E5%86%B5)
+- [**编译报错**](#%E7%BC%96%E8%AF%91%E6%8A%A5%E9%94%99)
+  - [导入项目一直Building](#%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE%E4%B8%80%E7%9B%B4building)
+  - [Failed to open zip file](#failed-to-open-zip-file)
+  - [The android gradle plugin version 2.3.0-beta4 is too old, please update to the latest version.](#the-android-gradle-plugin-version-230-beta4-is-too-old-please-update-to-the-latest-version)
+  - [The APK file  **.apk does not exist on disk.](#the-apk-file--apk-does-not-exist-on-disk)
+  - [Could not find com.android.tools.build:gradle](#could-not-find-comandroidtoolsbuildgradle)
+  - [Error:Execution failed for task ':xutils:mergeDebugAndroidTestResources'. > No slave process to process jobs, aborting](#errorexecution-failed-for-task-xutilsmergedebugandroidtestresources--no-slave-process-to-process-jobs-aborting)
+  - [Caused by: java.lang.IllegalStateException: This Activity already has an action bar supplied by the window decor. Do not request Window.FEATURE_SUPPORT_ACTION_BAR and set windowActionBar to false in your theme to use a Toolbar instead.](#caused-by-javalangillegalstateexception-this-activity-already-has-an-action-bar-supplied-by-the-window-decor-do-not-request-windowfeature_support_action_bar-and-set-windowactionbar-to-false-in-your-theme-to-use-a-toolbar-instead)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 

@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [DAY 1](#day-1)
+  - [Day 1,功能需求](#day-1%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82)
+  - [Day 1，可行性分析](#day-1%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90)
+  - [Day 1，其他准备](#day-1%E5%85%B6%E4%BB%96%E5%87%86%E5%A4%87)
+- [DAY 2 UI设计](#day-2-ui%E8%AE%BE%E8%AE%A1)
+- [DAY 3 创建项目](#day-3-%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE)
+- [Day 4](#day-4)
+  - [Day 4，界面编写](#day-4%E7%95%8C%E9%9D%A2%E7%BC%96%E5%86%99)
+  - [Day 4，实体类](#day-4%E5%AE%9E%E4%BD%93%E7%B1%BB)
+  - [Day 4，显示数据](#day-4%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE)
+  - [Day 4，缓存内容](#day-4%E7%BC%93%E5%AD%98%E5%86%85%E5%AE%B9)
+- [DAY 5](#day-5)
+  - [Day 5,界面编写](#day-5%E7%95%8C%E9%9D%A2%E7%BC%96%E5%86%99)
+  - [Day 5,实体类](#day-5%E5%AE%9E%E4%BD%93%E7%B1%BB)
+  - [Day 5,显示数据](#day-5%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE)
+  - [Day 5,设置与关于](#day-5%E8%AE%BE%E7%BD%AE%E4%B8%8E%E5%85%B3%E4%BA%8E)
+- [DAY 6](#day-6)
+  - [Day 6,文章收藏](#day-6%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F)
+  - [Day 6,夜间模式](#day-6%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F)
+  - [Day 6,版本适配](#day-6%E7%89%88%E6%9C%AC%E9%80%82%E9%85%8D)
+- [DAY 7](#day-7)
+  - [Day 7,在Google Play上线](#day-7%E5%9C%A8google-play%E4%B8%8A%E7%BA%BF)
+  - [Day 7,在GitHub开源](#day-7%E5%9C%A8github%E5%BC%80%E6%BA%90)
+  - [Day 7,Q&A](#day-7qa)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 [如何用一周时间开发一款Android APP并在Google Play上线](https://tonnyl.github.io/2017/02/08/Develop-an-Android-App-and-publish-it-on-Google-Play-in-a-week/)
 
 目标：实现[纸飞机](https://github.com/TonnyL/PaperPlane)App - 采用MVP架构，集合了知乎日报、果壳精选和豆瓣一刻的综合性阅读客户端。效果图如下所示：
