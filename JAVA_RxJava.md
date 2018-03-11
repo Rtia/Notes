@@ -1242,7 +1242,7 @@ RxBus，可以看[这篇文章](http://nerds.weddingpartyapp.com/tech/2014/12/24
 
 ## 操作符的使用
 
-### merge操作符，合并观察对象
+### merge：合并观察对象
 
 ```java
 List<String> list1 = new ArrayList<>() ;
@@ -1275,7 +1275,7 @@ observable.subscribe(new Action1() {
 
 ![](http://img.blog.csdn.net/20171231014104929?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### zip  操作符，合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据
+### zip：合并多个观察对象的数据。并且允许 Func2（）函数重新发送合并后的数据
 
 ```java
 List<String> list1 = new ArrayList<>() ;
@@ -1306,13 +1306,12 @@ observable3.subscribe(new Action1() {
 	   System.out.println( "zip-- " + o );
    }
 }) ;
-
 ```
 
 运行效果：**从效果图上可以看出，合并两个的观察对象数据项应该是相等的；如果出现了数据项不等的情况，合并的数据项以最小数据队列为准。**
 ![](http://img.blog.csdn.net/20171231013955391?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### scan累加器操作符
+### scan：累加
 
 ```java
 Observable observable = Observable.just( 1 , 2 , 3 , 4 , 5  ) ;
@@ -1328,31 +1327,29 @@ observable.scan(new Func2<Integer,Integer,Integer>() {
                  System.out.println( "scan-- " +  o );
              }
          })   ;
-
 ```
 
 运行效果：     
 第一次发射得到1，作为结果与2相加；发射得到3，作为结果与3相加，以此类推，打印结果：
 ![scan累加器操作符](http://img.blog.csdn.net/20171231014859559?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### filter 过滤操作符的使用
+### filter：过滤
 
 ```java
 Observable observable = Observable.just( 1 , 2 , 3 , 4 , 5 , 6 , 7 ) ;
 observable.filter(new Func1<Integer , Boolean>() {
-    @Override
-    public Boolean call(Integer o) {
-        //数据大于4的时候才会被发送
-        return o > 4 ;
-    }
-})
+            @Override
+            public Boolean call(Integer o) {
+                //数据大于4的时候才会被发送
+                return o > 4 ;
+            }
+        })
         .subscribe(new Action1() {
             @Override
             public void call(Object o) {
                 System.out.println( "filter-- " +  o );
             }
         })   ;
-
 ```
 
 运行效果
@@ -1360,17 +1357,17 @@ observable.filter(new Func1<Integer , Boolean>() {
 
 ### 消息数量过滤操作符的使用
 
-#### take ：取前n个数据
+#### take：取前n个数据
 
 #### takeLast：取后n个数据
 
-#### first 只发送第一个数据
+#### first：只发送第一个数据
 
-#### last 只发送最后一个数据
+#### last：只发送最后一个数据
 
-#### skip() 跳过前n个数据发送后面的数据
+#### skip：跳过前n个数据发送后面的数据
 
-#### skipLast() 跳过最后n个数据，发送前面的数据
+#### skipLast：跳过最后n个数据，发送前面的数据
 
 ```java
 //take 发送前3个数据
@@ -1438,7 +1435,7 @@ observable5.skipLast( 2 )
 效果图
 ![消息数量过滤操作符](http://img.blog.csdn.net/20171231014837150?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### elementAt 、elementAtOrDefault发送数据序列中第n个数据
+### elementAt 、elementAtOrDefault：发送数据序列中第n个数据
 
 ```java
 //elementAt() 发送数据序列中第n个数据 ，序列号从0开始
@@ -1470,7 +1467,7 @@ observable9.elementAtOrDefault(  8 , 666  )
 运行结果
 ![elementAt](http://img.blog.csdn.net/20171231014828107?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### startWith() 插入数据
+### startWith：插入数据
 
 ```java
 //插入普通数据
@@ -1496,13 +1493,12 @@ observable.startWith( Observable.from( list ))
                 System.out.println( "startWith2 -- " + o );
             }
         }) ;
-
 ```
 
 　　运行结果
 ![startWith()](http://img.blog.csdn.net/20171231014818246?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### delay操作符，延迟数据发送
+### delay：延迟数据发送
 
 ```java
 Observable<String> observable = Observable.just( "1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" ) ;
@@ -1517,7 +1513,7 @@ observable.delay( 3 , TimeUnit.SECONDS )  //延迟3秒钟
 
 ```
 
-### Timer  延时操作符的使用
+### timer：延时
 
 使用场景：xx秒后，执行xx     
 
@@ -1532,13 +1528,11 @@ Observable.timer( 5 , TimeUnit.SECONDS )
 				findViewById( R.id.image).setVisibility(View.VISIBLE );
 			}
 		}) ;
-
 ```
 
 ```java
 timer 返回一个 Observable , 它在延迟一段给定的时间后发射一个简单的数字0
 timer 操作符默认在computation调度器上执行，当然也可以用 Scheduler在定义执行的线程。
-
 ```
 
 #### delay vs timer
@@ -1548,7 +1542,7 @@ timer 操作符默认在computation调度器上执行，当然也可以用 Sched
   delay延时一次，延时完成后，可以连续发射多个数据。
   timer延时一次，延时完成后，只发射一次数据。
 
-### interval 轮询操作符，循环发送数据，数据从0开始递增
+### interval：轮询，循环发送数据，数据从0开始递增
 
 ``` java
 public class IntervalActivity extends AppCompatActivity { 
@@ -1577,32 +1571,29 @@ public class IntervalActivity extends AppCompatActivity {
         }
     }
 }
-
 ```
 
 ![interval 轮询操作符](http://img.blog.csdn.net/20171231014808440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### doOnNext() 操作符，在每次 OnNext() 方法被调用前执行
+### doOnNext：在每次 OnNext() 方法被调用前执行
 
 使用场景：从网络请求数据，在数据被展示前，缓存到本地
 
 ``` java
 Observable observable = Observable.just( "1" , "2" , "3" , "4" ) ;
 observable.doOnNext(new Action1() {
-   @Override
-   public void call(Object o) {
-	   System.out.println( "doOnNext--缓存数据" + o  );
-   }
-})
+               @Override
+               public void call(Object o) {
+                   System.out.println( "doOnNext--缓存数据" + o  );
+               }
+            })
 	   .subscribe(new Observer() {
 		   @Override
 		   public void onCompleted() {
-
 		   }
 
 		   @Override
 		   public void onError(Throwable e) {
-
 		   }
 
 		   @Override
@@ -1610,15 +1601,14 @@ observable.doOnNext(new Action1() {
 			   System.out.println( "onNext--" + o  );
 		   }
 	   }) ;
-
 ```
 
 ![doOnNext() 操作符](http://img.blog.csdn.net/20171231014756279?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### Buffer 操作符
+### buffer：打包
 
-- Buffer( int n )      把n个数据打成一个list包，然后再次发送。
-- Buffer( int n , int skip)   把n个数据打成一个list包，然后跳过第skip个数据。
+- buffer( int n )      把n个数据打成一个list包，然后再次发送。
+- buffer( int n , int skip)   把n个数据打成一个list包，然后跳过第skip个数据。
 
 使用场景：一个按钮每点击3次，弹出一个toast      
 
@@ -1671,7 +1661,7 @@ observable.buffer( 2 , 3 )  //把每两个数据为一组打成一个包，然�
 
 ![Buffer 操作符2](http://img.blog.csdn.net/20171231014734518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### throttleFirst 操作符在一段时间内，只取第一个事件，然后其他事件都丢弃。
+### throttleFirst：在一段时间内，只取第一个事件，其他事件都丢弃
 
 **使用场景**：
 1、button按钮防抖操作，防连续点击  
@@ -1694,7 +1684,7 @@ observable.buffer( 2 , 3 )  //把每两个数据为一组打成一个包，然�
 运行结果
 ![throttleFirst 操作符](http://img.blog.csdn.net/20171231014723739?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-### distinct    过滤重复的数据
+### distinct：过滤重复的数据
 
 ```java
 List<String> list = new ArrayList<>() ;
@@ -1750,12 +1740,12 @@ Observable.from( list )
 ![distinctUntilChanged()过滤连续重复的数据](http://img.blog.csdn.net/20171231014700941?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbW9pcmEzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 从结果可以看出，连续重复的数据已经被过滤掉了
 
-### debounce() 操作符一段时间内没有变化，就会发送一个数据
+### debounce：一段时间内没有变化，就会发送一个数据
 
 使用场景：百度关键词联想提示。在输入的过程中是不会从服务器拉数据的。当输入结束后，在400毫秒没有输入就会去获取数据。
  避免了，多次请求给服务器带来的压力.
 
-### doOnSubscribe()
+### doOnSubscribe：事件发出之前做一些初始化的工作
 
 使用场景： 可以在**事件发出之前做一些初始化的工作**，比如弹出进度条等等
 **注意**：
@@ -1784,7 +1774,7 @@ Observable.create(onSubscribe)
 
 ```
 
-### range 操作符
+### range：发射一个范围内的有序整数序列
 
 首先看range 方法的源码
 
@@ -1810,7 +1800,6 @@ public static Observable<Integer> range(int start, int count) {
  public static Observable<Integer> range(int start, int count, Scheduler scheduler) {
      return range(start, count).subscribeOn(scheduler);
  }
-
 ```
 
 Range操作符**发射一个范围内的有序整数序列，你可以指定范围的起始和长度**。
@@ -1826,7 +1815,6 @@ Observable.range( 10 , 3 )
 				  Log.v( "rx_range  " , "" + integer ) ;
 			  }
 		  }) ;
-
 ```
 
 **结果**
@@ -1838,13 +1826,12 @@ Observable.range( 10 , 3 )
 
 ```
 
-### defer 操作符
+### defer：订阅者**订阅时**才创建Observable
 
 例子
 
 ``` java
-public class DeferActivity extends AppCompatActivity {
- 
+public class DeferActivity extends AppCompatActivity { 
     String i = "10" ;
  
     @Override
@@ -1880,7 +1867,6 @@ public class DeferActivity extends AppCompatActivity {
         }) ;
     }
 }
-
 ```
 
 结果
@@ -1888,11 +1874,10 @@ public class DeferActivity extends AppCompatActivity {
 ```
 /rx_defer: 12  
 /rx_just: 11
-
 ```
 
 - 可以看到，**just**操作符是在**创建Observable**就进行了**赋值**操作，而**defer**是在订阅者**订阅时**才创建Observable，此时才进行真正的**赋值**操作。
-- Defer操作符会一直等待直到有观察者订阅它，然后它使用Observable工厂方法生成一个Observable。它对每个观察者都这样做，因此尽管每个订阅者都以为自己订阅的是同一个Observable，事实上每个订阅者获取的是它们自己的单独的数据序列。
+- defer操作符会一直等待直到有观察者订阅它，然后它使用Observable工厂方法生成一个Observable。它对每个观察者都这样做，因此尽管每个订阅者都以为自己订阅的是同一个Observable，事实上**每个订阅者获取的是它们自己的单独的数据序列**。
 - 在某些情况下，等待直到最后一分钟（就是直到订阅发生时）才生成Observable可以确保Observable包含最新的数据。
 
 ## 生命周期控制和内存优化
@@ -2595,7 +2580,6 @@ Observable
               public void call(Object o) {
               }
           }) ;
-
 ```
 
 **弊端**：虽然保持了链式编程结构的完整，但是**每次调用 .compose(schedulersTransformer ) 都是 new了一个对象**的。所以我们需要再次封装，尽量保证单例的模式。
@@ -2614,10 +2598,8 @@ public class RxUtil {
  
    public static  <T> Observable.Transformer<T, T> applySchedulers() {
         return (Observable.Transformer<T, T>) schedulersTransformer;
-    }
- 
+    } 
 }
-
 ```
 
 **使用**
@@ -2631,7 +2613,6 @@ Observable
 		public void call(Object o) {
 		}
 	}) ;
-
 ```
 
 ## 相关推荐
